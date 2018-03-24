@@ -1,0 +1,27 @@
+<form method="post">
+  <label for="first_name">* First Name: 
+    <input type="text" name="first_name" placeholder="Enter First Name">
+  </label>
+  <label for="last_name">* Last Name: 
+    <input type="text" name="last_name" placeholder="Enter Last Name">
+  </label>
+  <label for="email">* Email: 
+    <input type="text" name="email" placeholder="Enter Email Address">
+  </label>
+  <label for="password">* Password: 
+    <input type="password" name="password" placeholder="Enter Password">
+  </label>
+  <div id="error_layer_pass">
+    <p class="red">Password must be at least 16 characters long.</p>
+  </div>
+  <label for="password_confirm">* Password Confirmation: 
+    <input type="password" name="password_confirm" placeholder="Confirm Password">
+  </label>
+  <div id="error_layer_confirm">
+    <p class="red">Password confirmation must match Password.</p>
+  </div>
+  <input type="submit" value="Register">
+  <div id="nav">
+    <a [routerLink]="['../login']">Login</a>
+  </div>
+</form>

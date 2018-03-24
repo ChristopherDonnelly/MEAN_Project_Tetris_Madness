@@ -1,0 +1,27 @@
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#wrapper {
+    margin: 0px auto;
+    text-align: left;
+}
+
+#wrapper h1 {
+    margin: 20px 40px 30px;
+    font-size: 3em;
+    font-weight: normal;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+div#nav {
+    margin: 10px 0px 30px;
+    font-size: 1.6em;
+}
+
+a {
+    padding: 0px 5px;
+}

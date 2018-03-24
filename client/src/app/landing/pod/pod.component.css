@@ -1,0 +1,27 @@
+h1 {
+    margin: 0px 110px;
+}
+#pod_layer {
+    border: 1px solid black;
+    padding: 10px 5px;
+    margin: 10px 110px;
+    background-color: #eeeeee;
+}
+img {
+    width: 130px;
+    display: inline-block;
+    vertical-align: top;
+}
+#name_desc, #high_score {
+    display: inline-block;
+    vertical-align: top;
+    width: 33%;
+    padding-left: 10px;
+}
+#name_desc {
+    width: 63%;
+}
+#high_score {
+    width: 10%;
+    text-align: right;
+}
