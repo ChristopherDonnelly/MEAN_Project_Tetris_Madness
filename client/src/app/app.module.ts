@@ -15,7 +15,7 @@ import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
 import { StatsComponent } from './stats/stats.component';
 
-
+import { ChartsModule } from 'ng2-charts';
 
 
 @NgModule({
@@ -32,7 +32,8 @@ import { StatsComponent } from './stats/stats.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ChartsModule
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]

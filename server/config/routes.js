@@ -1,6 +1,6 @@
 const db_ctrl = require('../controllers/db_controller');
 
-var path = require('path');
+const path = require('path');
 
 module.exports = (app) => {
 

@@ -17,7 +17,7 @@ const routes: Routes = [
       {path: '', pathMatch: 'prefix', redirectTo: 'login'}
     ]
   },
-  {path: 'stats', component: StatsComponent},
+  { path: 'stats', component: StatsComponent },
   { path: '', pathMatch: 'full', redirectTo: '/landing/login' },
   { path: '**', component: PodComponent }
 ];

@@ -1,15 +1,9 @@
 <form method="post">
-  <label for="email">* Email: 
-    <input type="text" name="email" placeholder="Enter Email Address">
-  </label>
-  <label for="password">* Password:
-    <input type="password" name="password" placeholder="Enter Password">
+  <label for="username">* Username: 
+    <input type="text" name="username" placeholder="Enter Username">
   </label>
   <div id="error_layer">
     <p class="red">Invalid Login Credentials</p>
   </div>
   <input type="submit" value="Login">
-  <div id="nav">
-    <a [routerLink]="['../register']">Register</a>
-  </div>
 </form>
