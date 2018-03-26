@@ -5,6 +5,7 @@ import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
 import { StatsComponent } from './stats/stats.component';
+import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     ]
   },
   {path: 'stats', component: StatsComponent},
+  { path: 'tetris-board', component: TetrisBoardComponent },
   { path: '', pathMatch: 'full', redirectTo: '/landing/login' },
   { path: '**', component: PodComponent }
 ];

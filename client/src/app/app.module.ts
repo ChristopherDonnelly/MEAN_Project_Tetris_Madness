@@ -14,9 +14,10 @@ import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
 import { StatsComponent } from './stats/stats.component';
+import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 
-
-
+// Import tetris library
+import { NGTrisModule } from 'ngtris';
 
 @NgModule({
   declarations: [
@@ -25,14 +26,16 @@ import { StatsComponent } from './stats/stats.component';
     LoginComponent,
     RegisterComponent,
     PodComponent,
-    StatsComponent
+    StatsComponent,
+    TetrisBoardComponent
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NGTrisModule
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
