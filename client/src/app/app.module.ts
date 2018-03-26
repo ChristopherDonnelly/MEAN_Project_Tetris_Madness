@@ -13,6 +13,7 @@ import { LandingComponent } from './landing/landing.component';
 import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
+import { StatsComponent } from './stats/stats.component';
 
 
 
@@ -23,7 +24,8 @@ import { RegisterComponent } from './landing/register/register.component';
     LandingComponent,
     LoginComponent,
     RegisterComponent,
-    PodComponent
+    PodComponent,
+    StatsComponent
 
   ],
   imports: [

@@ -4,6 +4,7 @@ import { LandingComponent } from './landing/landing.component';
 import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
+import { StatsComponent } from './stats/stats.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
       {path: '', pathMatch: 'prefix', redirectTo: 'login'}
     ]
   },
+  {path: 'stats', component: StatsComponent},
   { path: '', pathMatch: 'full', redirectTo: '/landing/login' },
   { path: '**', component: PodComponent }
 ];
