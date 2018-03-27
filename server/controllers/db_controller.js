@@ -21,12 +21,24 @@ module.exports = {
             }
         });
     },
+    getPOD: (req, res) => {
+        console.log('Find User with highest score.')
+        User.findOne({}).sort('-score').exec(function (err, user) {
+            if(err){
+                res.json({message: "Error", error: err});
+            }else{
+                res.json({message: "Success", user: user});
+            }
+        });
+    },
     update: (req, res) => {
         var query = {'_id': req.params.id};
 
+        console.log(req.body)
+      
         console.log('Attempting to update User by Id: '+req.body);
 
-        User.findByIdAndUpdate(query, req.body, {upsert: true, new: true, runValidators: true}, function(err, player){
+        User.findByIdAndUpdate(query, req.body, {upsert: true, new: true, runValidators: true}, function(err, user){
             if(err) {
                 console.log('Something went wrong, could not update User: '+req.params.id);
                 console.log("Returned error", err);
@@ -48,6 +60,30 @@ module.exports = {
                 res.json({message: "Error", error: err});
             } else {
                 console.log('Successfully created new User: ' + req.body);
+                res.json({message: "Success", user: user});
+            }
+        });
+    },
+    login: (req, res) => {
+        console.log(`Attempt Login User: ${req.body.username}`);
+
+        User.findOne({username: req.body.username}, (err, user) => {
+            console.log(err)
+            if(err){
+                var user = new User( req.body );
+
+                user.save((err) => {
+                    if(err) {
+                        console.log('Something went wrong while trying to create User: ' + req.body);
+                        console.log("Returned error", err);
+                        res.json({message: "Error", error: err});
+                    } else {
+                        console.log('Successfully created new User: ' + req.body.username);
+                        res.json({message: "Success", user: user});
+                    }
+                });
+            }else{
+                console.log('Successfully logged in User: ' + req.body.username);
                 res.json({message: "Success", user: user});
             }
         });

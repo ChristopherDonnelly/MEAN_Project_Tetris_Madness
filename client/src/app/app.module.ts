@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpService } from './http.service';
 import { HttpClientModule } from '@angular/common/http';
 
+import { PlayerService } from './player.service';
+
 import { LandingComponent } from './landing/landing.component';
 import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
@@ -17,7 +19,7 @@ import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 
 // Import tetris library
-import { NGTrisModule } from 'ngtris';
+// import { NGTrisModule } from 'ngtris';
 
 @NgModule({
   declarations: [
@@ -34,10 +36,9 @@ import { NGTrisModule } from 'ngtris';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule,
-    NGTrisModule
+    FormsModule
   ],
-  providers: [HttpService],
+  providers: [HttpService, PlayerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

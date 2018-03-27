@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { Routes, RouterModule } from '@angular/router';
+
+import { PlayerService } from './player.service';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +10,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 export class AppComponent {
 
-  constructor( ){}
+  constructor(
+    public playerService: PlayerService
+  ) {}
 
 }

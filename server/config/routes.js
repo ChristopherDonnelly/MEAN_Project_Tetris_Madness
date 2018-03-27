@@ -21,7 +21,15 @@ module.exports = (app) => {
     });
 
     app.delete('/users/:id', (req, res) => {
-        player_ctrl.delete(req, res);
+        db_ctrl.delete(req, res);
+    });
+
+    app.post('/login', (req, res) => {
+        db_ctrl.login(req, res);
+    });
+    
+    app.get('/pod', (req, res) => {
+        db_ctrl.getPOD(req, res);
     });
     
     app.all("*", (req,res,next) => {

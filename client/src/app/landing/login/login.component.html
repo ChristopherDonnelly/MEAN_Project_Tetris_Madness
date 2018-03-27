@@ -1,15 +1,12 @@
-<form method="post">
-  <label for="email">* Email: 
-    <input type="text" name="email" placeholder="Enter Email Address">
-  </label>
-  <label for="password">* Password:
-    <input type="password" name="password" placeholder="Enter Password">
+<form method="post" (submit)="login()">
+  <label for="username">* Username: 
+    <input type="text" name="username" [(ngModel)]="playerService.username" placeholder="Enter Username">
   </label>
   <div id="error_layer">
-    <p class="red">Invalid Login Credentials</p>
+    <p class="red">{{username.errors}}</p>
   </div>
   <input type="submit" value="Login">
-  <div id="nav">
+  <!-- <div id="nav">
     <a [routerLink]="['../register']">Register</a>
-  </div>
+  </div> -->
 </form>

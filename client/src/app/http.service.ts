@@ -5,9 +5,17 @@ import { HttpClient } from '@angular/common/http';
 export class HttpService {
 
   constructor(private _http: HttpClient){
-    this.getAllUsers();
+    // this.getAllUsers();
   }
   
+  login(data){
+    return this._http.post('/login', data);
+  }
+
+  getPOD(){
+    return this._http.get('/pod');
+  }
+
   getAllUsers(){
     return this._http.get('/users');
   }
