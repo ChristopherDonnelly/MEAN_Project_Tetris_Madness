@@ -19,6 +19,7 @@ import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { ChatComponent } from './lobby/chat/chat.component';
+import { BoardComponent } from './board/board.component';
 
 // Import tetris library
 // import { NGTrisModule } from 'ngtris';
@@ -33,7 +34,8 @@ import { ChatComponent } from './lobby/chat/chat.component';
     StatsComponent,
     TetrisBoardComponent,
     LobbyComponent,
-    ChatComponent
+    ChatComponent,
+    BoardComponent
   ],
   imports: [
     BrowserModule,

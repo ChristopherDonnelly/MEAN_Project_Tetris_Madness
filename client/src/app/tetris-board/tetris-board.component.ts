@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // import { NGTrisModule } from 'ngtris';
+// import * as TetrisScript from '../../quickCheck/tetris';
+
 
 @Component({
   selector: 'app-tetris-board',
@@ -10,10 +12,11 @@ export class TetrisBoardComponent implements OnInit {
 
     constructor(
         //   private ngtris: NGTrisModule
+        // private tetrisScript: TetrisScript
     ) { }
 
   ngOnInit() {
-
+    // console.log(this.tetrisScript.dropInterval);
   }
 
 //   const canvas = document.getElementById('tetris');
