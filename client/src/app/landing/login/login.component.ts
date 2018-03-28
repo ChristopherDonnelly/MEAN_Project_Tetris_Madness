@@ -9,6 +9,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
 export class LoginComponent implements OnInit {
   username: any;
   error: boolean;
@@ -43,8 +44,9 @@ export class LoginComponent implements OnInit {
       }else{
         console.log('Player Logged in as Username: '+data['user'].username);
         this.playerService.username = data['user'].username;
+        this.playerService.connect();
 
-        this._router.navigate(['/']);
+        this._router.navigate(['/lobby']);
       }
     });
   }

@@ -17,6 +17,8 @@ import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
 import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
+import { LobbyComponent } from './lobby/lobby.component';
+import { ChatComponent } from './lobby/chat/chat.component';
 
 // Import tetris library
 // import { NGTrisModule } from 'ngtris';
@@ -29,8 +31,9 @@ import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
     RegisterComponent,
     PodComponent,
     StatsComponent,
-    TetrisBoardComponent
-
+    TetrisBoardComponent,
+    LobbyComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,43 @@
+#chat_layer {
+    margin: 0px auto;
+    width: 970px;
+}
+input[type="text"] {
+    width: 700px;
+    height: 25px;
+    padding: 0px 5px;
+    margin: 10px 0px;
+}
+#messages {
+    height: 150px;
+    overflow-y: auto;
+    padding: 0px 5px;
+    font-family: arial;
+    font-size: 1em;
+    border: 1px solid darkgray;
+}
+#messages p {
+    margin: 10px 5px;
+}
+#messages p span {
+    font-weight: bold;
+}
+input[type="submit"] {
+    cursor: pointer;
+    width: 75px;
+    height: 29px;
+}
+#message_input {
+    text-align: right;
+    margin-right: 10px;
+}
+#messages_layer {
+    margin-right: 10px;
+}
+.server_msg {
+    color: red;
+    font-style: italic;
+}
+.server_msg:before {
+    content: '*** ';
+}

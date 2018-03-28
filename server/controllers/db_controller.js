@@ -69,7 +69,7 @@ module.exports = {
 
         User.findOne({username: req.body.username}, (err, user) => {
             console.log(err)
-            if(err){
+            if(err||!user){
                 var user = new User( req.body );
 
                 user.save((err) => {
