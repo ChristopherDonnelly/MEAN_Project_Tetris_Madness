@@ -1,5 +1,6 @@
 const xp = require("express");
 const bp = require("body-parser");
+
 const port = 8000;
 
 const app = xp();
@@ -11,6 +12,8 @@ require('./server/config/mongoose.js');
 require('./server/config/routes.js')(app);
 
 let users = [];
+let games = [];
+
 let gameQueue = {
     gameId: '',
     username: '',
@@ -24,6 +27,8 @@ const server = app.listen(8000, () => {
 const io = require('socket.io').listen(server);
 
 io.sockets.on('connection', function (socket) {
+    let myGameRoom;
+
     console.log("Client/socket is connected!");
     console.log("Client/socket id is: ", socket.id);
 
@@ -37,34 +42,38 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('createGame', (player) => {
-        var newGame;
-
-        console.log('Message: '+player.username);
-        console.log(gameQueue)
 
         if(gameQueue.gameId==''){
             let val = (socket.id.length/4);
             let gameId = socket.id.substring(val, socket.id.length-val);
             
+            console.log('Player: '+player.username+' created room: '+gameId);
+
             gameQueue.gameId = gameId;
             gameQueue.username = player.username;
             gameQueue.userSocket = socket.id;
-    
-            console.log('gameInfo.gameId: '+gameQueue.gameId)
-            console.log('gameInfo.username: '+gameQueue.username)
-            console.log('gameInfo.userSocket: '+gameQueue.userSocket)
+            myGameRoom = room;
 
             socket.emit('gameInfo', gameQueue);
 
-            newGame = io.of('/'+gameId);
+            var room = '/'+gameId;
+            socket.nickname = room;
+            socket.join(room);
 
-            newGame.on('connection', function(socket){
-                console.log('someone connected');
-                newGame.emit('joinGame', 'You joined the game!');
-            });
         }else{
+            var room = '/'+gameQueue.gameId;
+            
+            console.log('Player: '+player.username+' joined room: '+gameQueue.gameId);
+
+            socket.nickname = room;
+            socket.join(room);
+            myGameRoom = room;
             socket.emit('gameInfo', gameQueue);
-            newGame.broadcast.emit('gameInfo', gameQueue);
+
+            socket.broadcast.to(room).emit('gameInfo', { gameId: gameQueue.gameId, username: player.username, userSocket: socket.id });
+
+            io.sockets.in(room).emit('startGame');
+
             gameQueue = {
                 gameId: '',
                 username: '',
@@ -74,10 +83,15 @@ io.sockets.on('connection', function (socket) {
 
     });
 
+    socket.on('update', (data) => {
+        socket.broadcast.to('/'+data.room_id).emit('updateOpponent', data);
+    });
+
     socket.on('disconnect', function () {
         let currentUser = users.filter( obj => obj.id == socket.id )[0];
-        users = users.filter( obj => obj.id != socket.id );
+        // users = users.filter( obj => obj.id != socket.id );
         if(currentUser){
+            if(myGameRoom) socket.broadcast.to(myGameRoom).emit('playerExit', { message: currentUser.username + ' has left the game.' });
             socket.broadcast.emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ', message: currentUser.username + ' has left chat.' });
         }
     });

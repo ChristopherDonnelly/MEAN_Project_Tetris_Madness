@@ -19,10 +19,14 @@ import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { ChatComponent } from './lobby/chat/chat.component';
-import { BoardComponent } from './board/board.component';
 
+<<<<<<< HEAD
+// Import tetris library
+// import { NGTrisModule } from 'ngtris';
+=======
 import { ChartsModule } from 'ng2-charts';
 
+>>>>>>> stats
 
 @NgModule({
   declarations: [
@@ -34,8 +38,7 @@ import { ChartsModule } from 'ng2-charts';
     StatsComponent,
     TetrisBoardComponent,
     LobbyComponent,
-    ChatComponent,
-    BoardComponent
+    ChatComponent
   ],
   imports: [
     BrowserModule,
