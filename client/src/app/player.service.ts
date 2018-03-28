@@ -14,11 +14,17 @@ export class PlayerService {
   gameId: String;
   opponentSocket: String;
 
+  my_data: Number;
+  opponent_data: Number;
+
   constructor() { }
 
   clear(){
     this._id = '';
     this.username = '';
+
+    this.my_data = 1;
+    this.opponent_data = 1;
   }
 
   connect(){
