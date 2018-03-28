@@ -1,0 +1,21 @@
+<<<<<<< HEAD
+<form method="post" (submit)="login()">
+  <label for="username">* Username: 
+    <input type="text" name="username" [(ngModel)]="playerService.username" placeholder="Enter Username">
+=======
+<form method="post">
+  <label for="username">* Username: 
+    <input type="text" name="username" placeholder="Enter Username">
+>>>>>>> stats
+  </label>
+  <div id="error_layer">
+    <p class="red">{{username.errors}}</p>
+  </div>
+  <input type="submit" value="Login">
+<<<<<<< HEAD
+  <!-- <div id="nav">
+    <a [routerLink]="['../register']">Register</a>
+  </div> -->
+=======
+>>>>>>> stats
+</form>
