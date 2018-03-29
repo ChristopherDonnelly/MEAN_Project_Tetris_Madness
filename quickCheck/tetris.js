@@ -177,7 +177,7 @@ function addConcrete(arena){
         if (arena[y][0] === 8){concrete += 1}
     };
     for (let i=0; i < (player.sabotage - concrete); i++) {
-        arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);  /////// needs to run only once and not during each merge
+        arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);  
         arena.shift();
     }
 }
@@ -365,6 +365,7 @@ const colors = [
     '#FFE138',
     '#3877FF',
     '#6b6767',
+    '#7ab1a9',
 ];
 
 let player = initializePlayer();
