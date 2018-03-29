@@ -8,6 +8,10 @@ module.exports = (app) => {
         db_ctrl.findOne(req, res);
     });
 
+    app.get('/users/:id/:game_id', (req, res) => {
+        db_ctrl.findOneGame(req, res);
+    });
+
     app.get('/users', (req, res) => {
         db_ctrl.findAll(req, res);
     });

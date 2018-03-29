@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   error: boolean;
 
   constructor(
-    public playerService: PlayerService,
+    private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _httpService: HttpService
@@ -26,27 +26,32 @@ export class LoginComponent implements OnInit {
     this.username = {errors: ''}
     this.error = false;
 
-    this.playerService.clear();
+    // this.playerService.clear();
   }
 
   login(){
 
     let loginPlayer = this._httpService.login({username: this.playerService.username});
+
     loginPlayer.subscribe(data => {
       if(data['message'] == 'Error'){
         this.error = true;
-        if(data['error'].indexOf('E11000')!=-1){
-          this.username.errors = "Username already exists"
-        }else{
+        if(data['error'].constructor === Object){
           console.log(data['error'].errors.username.message)
           this.username.errors = data['error'].errors.username.message;
+        }else if(data['error'].indexOf('E11000')!=-1){
+          this.username.errors = "Username already exists";
         }
       }else{
         console.log('Player Logged in as Username: '+data['user'].username);
-        this.playerService.username = data['user'].username;
+
+        Object.assign(this.playerService, data['user']);
+
+        console.log(this.playerService)
+
         this.playerService.connect();
 
-        this._router.navigate(['/lobby']);
+        this._router.navigate(['/stats']);
       }
     });
   }

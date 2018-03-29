@@ -11,7 +11,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 export class LobbyComponent implements OnInit {
 
   constructor(
-    public playerService: PlayerService,
+    private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _httpService: HttpService

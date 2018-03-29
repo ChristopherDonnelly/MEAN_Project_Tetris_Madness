@@ -17,7 +17,7 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   allMessages: any;
 
   constructor(
-    public playerService: PlayerService,
+    private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _httpService: HttpService

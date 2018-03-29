@@ -1,13 +1,14 @@
-
-<h1>Current Leader!</h1>
-<div id="pod_layer">
-  <img src="https://miquon.org/wp-content/uploads/2016/02/GenericUser.png" alt="Current Leader">
-  <div id="name_desc">
-    <h2>Username</h2>
-    <p>{{user.username}}</p>
-  </div>
-  <div id="high_score">
-    <h2>High Score</h2>
-    <p>{{user.score}}</p>
+<div id="pod" *ngIf="user.username">
+  <h1>Current Leader!</h1>
+  <div id="pod_layer">
+    <img src="https://miquon.org/wp-content/uploads/2016/02/GenericUser.png" alt="Current Leader">
+    <div id="name_desc">
+      <h2>Username</h2>
+      <p>{{user.username}}</p>
+    </div>
+    <div id="high_score">
+      <h2>High Score</h2>
+      <p>{{user.score}}</p>
+    </div>
   </div>
 </div>

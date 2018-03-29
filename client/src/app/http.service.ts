@@ -24,6 +24,10 @@ export class HttpService {
     return this._http.get('/users/'+id);
   }
 
+  getUserGame(id, game_id){
+    return this._http.get('/users/'+id+'/'+game_id);
+  }
+
   updateUser(id, data){
     return this._http.put('/users/'+id, data);
   }

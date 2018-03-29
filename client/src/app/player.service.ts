@@ -4,6 +4,8 @@ import * as io from 'socket.io-client';
 
 @Injectable()
 export class PlayerService {
+  static instance: PlayerService;
+
   _id: String;
   username: String;
   
@@ -14,10 +16,12 @@ export class PlayerService {
   gameId: String;
   opponentSocket: String;
 
-  my_data: Number;
-  opponent_data: Number;
+  my_data: number;
+  opponent_data: number;
 
-  constructor() { }
+  constructor() {
+    return PlayerService.instance = PlayerService.instance || this;
+  }
 
   clear(){
     this._id = '';
