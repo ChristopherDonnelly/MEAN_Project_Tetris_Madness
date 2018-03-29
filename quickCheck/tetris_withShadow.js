@@ -1,45 +1,31 @@
-// const canvas = document.getElementById('tetris');
-// const context = canvas.getContext('2d');
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
 
-// const opponentCanvas = document.getElementById('opponentCanvas');
-// const opponentContext = opponentCanvas.getContext('2d');
+const shadowCanvas = document.getElementById('shadowTetris');
+const shadowContext = shadowCanvas.getContext('2d');
 
-// const nextBlockCanvas = document.getElementById('nextBlockCanvas');
-// const nextBoxContext = nextBlockCanvas.getContext('2d');
+const nextBlockCanvas = document.getElementById('nextBlockCanvas');
+const nextBoxContext = nextBlockCanvas.getContext('2d');
 
-// context.scale(20, 20);
-// opponentContext.scale(20, 20);
-// nextBoxContext.scale(20, 20);
+context.scale(20, 20);
+shadowContext.scale(20,20);
+nextBoxContext.scale(30, 30);
 
 function arenaSweep() {
-    let rowCount = 0;
-    let pointsMultiplier = 1;
+    let rowCount = 1;
     outer: for (let y = arena.length -1; y > 0; --y) {
         for (let x = 0; x < arena[y].length; ++x) {
             if (arena[y][x] === 0) {
                 continue outer;
             }
         }
+
         const row = arena.splice(y, 1)[0].fill(0);
         arena.unshift(row);
         ++y;
 
-        rowCount += 1;
-        player.lines += 1;
-        player.score += rowCount * 10 * pointsMultiplier;
-        pointsMultiplier *= 2;
-    }
-    if (rowCount == 1) {
-        player.singles += 1;
-    }
-    else if (rowCount == 2) {
-        player.doubles += 1;
-    }
-    else if (rowCount == 3) {
-        player.triples += 1;
-    }
-    else {
-        player.quadruples += 1;
+        player.score += rowCount * 10;
+        rowCount *= 2;
     }
 }
 
@@ -130,27 +116,22 @@ function draw() {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
     drawMatrix(arena, {x: 0, y: 0}, context);
+    updateShadow();
     drawMatrix(player.matrix, player.pos, context);
+}
+
+function drawShadow() {
+    shadowContent.fillStyle = '#000';
+    shadowContent.fillRect(0, 0, shadowCanvas.width,shadowCanvas.height);
+    drawMatrix(futurePieceBox, {x: 0, y:0}, shadowContent);
+    drawMatrix(nextPiece.matrix, {x:0, y:0}, shadowContent);
 }
 
 function drawNext() {
     nextBoxContext.fillStyle = '#000';
     nextBoxContext.fillRect(0, 0, nextBlockCanvas.width,nextBlockCanvas.height);
-    drawMatrix(NextPieceBox, {x: 0, y:0}, nextBoxContext);
-    drawMatrix(nextPiece.matrix, nextPiece.pos, nextBoxContext);
-} 
-
-function drawOpponent() {
-    opponentContext.fillStyle = '#000';
-    opponentContext.fillRect(0, 0, opponentCanvas.width,opponentCanvas.height);
-    drawMatrix(opponentArena, {x: 0, y:0}, opponentContext);
-    drawMatrix(opponent.matrix, opponent.pos, opponentContext);
-} 
-
-function updateOpponent() {
-    opponent = player;
-    opponentArena = arena;
-    drawOpponent();
+    drawMatrix(futurePieceBox, {x: 0, y:0}, nextBoxContext);
+    drawMatrix(nextPiece.matrix, {x:0, y:0}, nextBoxContext);
 }
 
 function merge(arena, player) {
@@ -161,7 +142,6 @@ function merge(arena, player) {
             }
         });
     });
-    updateOpponent();
 }
 
 function rotate(matrix, dir) {
@@ -189,12 +169,12 @@ function playerDrop() {
     if (collide(arena, player)) {
         player.pos.y--;
         merge(arena, player);
+        updateShadow();
         playerReset();
-        arenaSweep(); 
+        arenaSweep();
         updateScore();
     }
     dropCounter = 0;
-    updateOpponent();
 }
 
 function playerMove(offset) {
@@ -202,7 +182,7 @@ function playerMove(offset) {
     if (collide(arena, player)) {
         player.pos.x -= offset;
     }
-    updateOpponent();
+    updateShadow();
 }
 
 function randomPiece(){
@@ -217,12 +197,12 @@ function playerReset() {
     player.pos.y = 0;
     player.pos.x = (arena[0].length / 2 | 0) -
                    (player.matrix[0].length / 2 | 0);
+    updateShadow();
     if (collide(arena, player)) {
-        endOfGame();
         arena.forEach(row => row.fill(0));
+        player.score = 0;
         updateScore();
     }
-    updateOpponent();
 }
 
 function playerRotate(dir) {
@@ -238,7 +218,7 @@ function playerRotate(dir) {
             return;
         }
     }
-    updateOpponent();
+    updateShadow();
 }
 
 let dropCounter = 0;
@@ -257,24 +237,72 @@ function update(time = 0) {
 
     draw();
     requestAnimationFrame(update);
+    updateShadow();
 }
 
 function updateScore() {
     document.getElementById('score').innerText = player.score;
-    document.getElementById('lines').innerText = player.lines;
+}
+
+
+function drawShadow(matrix, offset) {
+    matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                context.fillStyle = '#4c4c4c';
+                context.fillRect(x + offset.x,
+                                 y + offset.y,
+                                 1, 1);
+            }
+        });
+    });
+}
+
+function shadowPosition(shadowArena, shadow) {
+    const m = shadow.matrix;
+    let depth = shadowArena.length - 1;
+    while(depth > 0){
+        shadow.pos.y = shadow.pos.y + 1;
+        if (collide(arena, shadow)) {
+            shadow.pos.y--;
+            break;
+        }    
+        depth--;
+    }
+}
+
+function shadowCollide(shadowArena, shadow) {
+    const m = shadow.matrix;
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
+            if (m[y][x] !== 0 &&
+               (shadowArena[y + shadow.pos.y] &&
+                shadowArena[y + shadow.pos.y][x + shadow.pos.x]) !== 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function updateShadow(){
+    // console.log("PLAYER SHADOW FUNCTION INITIATED");
+    shadow.matrix = player.matrix;
+    shadow.pos.x = player.pos.x;
+    shadowPosition(shadowArena, shadow);
+    // drawMatrix(shadowArena, {x: 0, y: 0}, shadowContext);
+    drawShadow(shadow.matrix, shadow.pos);
+    // console.log("Shadow details: ",shadow);
 }
 
 function updateNext() {
-    NextPieceBox.forEach(row => row.fill(0));
-    nextPiece.pos.y = (NextPieceBox.length / 2 | 0) - (nextPiece.matrix.length / 2 | 0);
-    nextPiece.pos.x = (NextPieceBox[0].length / 2 | 0) - (nextPiece.matrix[0].length / 2 | 0);
-    merge(NextPieceBox, nextPiece);
+    futurePieceBox.forEach(row => row.fill(0));
+    // nextPiece.pos.y = (futurePieceBox.length / 2 | 0) -
+    // (nextPiece.matrix.length / 2 | 0);
+    // nextPiece.pos.x = (futurePieceBox[0].length / 2 | 0) -
+    // (nextPiece.matrix[0].length / 2 | 0);
+    merge(futurePieceBox, nextPiece);
     drawNext();
-}
-
-function endOfGame() {
-    player.score = 0; 
-    player.lines = 0;
 }
 
 document.addEventListener('keydown', event => {
@@ -304,8 +332,8 @@ const colors = [
 ];
 
 const arena = createMatrix(12, 20);
-let opponentArena = createMatrix(12, 20);
-const NextPieceBox = createMatrix(5,5);
+let shadowArena = createMatrix(12, 20);
+const futurePieceBox = createMatrix(6,6);
 
 let nextPiece = {
     pos: {x: 0, y: 0},
@@ -316,20 +344,15 @@ const player = {
     pos: {x: 0, y: 0},
     matrix: null,
     score: 0,
-    lines: 0,
-    singles: 0,
-    doubles: 0,
-    triples: 0,
-    quadruples: 0
 };
 
-let opponent = {
-    pos: {x: 0, y:0},
-    matrix: null,
-    score: 0,
-    lines: 0
+const shadow = {
+    pos: {x: player.pos.x, y: 0},
+    matrix: player.matrix
 }
 
 playerReset();
 updateScore();
 update();
+updateShadow();
+updateNext();

@@ -1,15 +1,15 @@
-// const canvas = document.getElementById('tetris');
-// const context = canvas.getContext('2d');
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
 
-// const opponentCanvas = document.getElementById('opponentCanvas');
-// const opponentContext = opponentCanvas.getContext('2d');
+const opponentCanvas = document.getElementById('opponentCanvas');
+const opponentContext = opponentCanvas.getContext('2d');
 
-// const nextBlockCanvas = document.getElementById('nextBlockCanvas');
-// const nextBoxContext = nextBlockCanvas.getContext('2d');
+const nextBlockCanvas = document.getElementById('nextBlockCanvas');
+const nextBoxContext = nextBlockCanvas.getContext('2d');
 
-// context.scale(20, 20);
-// opponentContext.scale(20, 20);
-// nextBoxContext.scale(20, 20);
+context.scale(20, 20);
+opponentContext.scale(20, 20);
+nextBoxContext.scale(20, 20);
 
 function arenaSweep() {
     let rowCount = 0;
@@ -138,14 +138,14 @@ function drawNext() {
     nextBoxContext.fillRect(0, 0, nextBlockCanvas.width,nextBlockCanvas.height);
     drawMatrix(NextPieceBox, {x: 0, y:0}, nextBoxContext);
     drawMatrix(nextPiece.matrix, nextPiece.pos, nextBoxContext);
-} 
+}
 
 function drawOpponent() {
     opponentContext.fillStyle = '#000';
     opponentContext.fillRect(0, 0, opponentCanvas.width,opponentCanvas.height);
     drawMatrix(opponentArena, {x: 0, y:0}, opponentContext);
     drawMatrix(opponent.matrix, opponent.pos, opponentContext);
-} 
+}
 
 function updateOpponent() {
     opponent = player;

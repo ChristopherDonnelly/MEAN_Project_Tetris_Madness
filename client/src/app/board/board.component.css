@@ -1,0 +1,41 @@
+body {
+  background: #202028;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 2em;
+  text-align: center;
+}
+canvas {
+  border: solid .2em #fff;
+  height: 70vh;
+  display: inline-block;
+  vertical-align: top;
+}
+#canvases {
+  margin-top: 10px;
+}
+opponentCanvas {
+  border: solid .2em #fff;
+  height: 70vh;
+  display: inline-block;
+  vertical-align: top;
+}
+#nextBLockCanvas {
+  border: solid .2em #fff;
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  vertical-align: top;
+}
+#score {
+  display: inline-block;
+  vertical-align: top;
+}
+#lines {
+  display: inline-block;
+  vertical-align: top;
+}
+#stats{
+  display: inline-block;
+  vertical-align: top;
+}

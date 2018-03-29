@@ -19,8 +19,10 @@ import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { ChatComponent } from './lobby/chat/chat.component';
+import { BoardComponent } from './board/board.component';
 
 import { ChartsModule } from 'ng2-charts';
+import { BoardtestComponent } from './boardtest/boardtest.component';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { ChartsModule } from 'ng2-charts';
     StatsComponent,
     TetrisBoardComponent,
     LobbyComponent,
-    ChatComponent
+    ChatComponent,
+    BoardComponent,
+    BoardtestComponent
   ],
   imports: [
     BrowserModule,
