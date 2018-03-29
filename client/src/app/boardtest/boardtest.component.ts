@@ -379,7 +379,7 @@ export class BoardtestComponent implements OnInit {
     this.opponent = this.player;
     this.opponentArena = this.arena;
     this.drawOpponent();
-  }
+    }
 
   updateScore() {
     // document.getElementById('score').innerText = this.player.score;
