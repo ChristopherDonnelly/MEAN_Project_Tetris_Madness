@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { HttpService } from '../http.service';
 import { PlayerService } from '../player.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-boardtest',
@@ -12,24 +14,37 @@ export class BoardtestComponent implements OnInit {
   @ViewChild('nextBlockCanvas') private nextBlockCanvas: ElementRef;
 
   constructor(
-    private playerService: PlayerService
-  ) { 
-    this.addEventListener();
-  }
+    private playerService: PlayerService,
+    private _router: Router,
+    private _route: ActivatedRoute,
+    private _httpService: HttpService
+  ) { }
 
   ngOnInit() {
-    this.context = this.canvas.nativeElement.getContext('2d');
-    this.opponentContext = this.opponentCanvas.nativeElement.getContext('2d');
-    this.nextBoxContext = this.nextBlockCanvas.nativeElement.getContext('2d');
+    if(!this.playerService.username){
+        this._router.navigate(['/']);
+    }else{
+        this.addEventListener();
+        this.context = this.canvas.nativeElement.getContext('2d');
+        this.opponentContext = this.opponentCanvas.nativeElement.getContext('2d');
+        this.nextBoxContext = this.nextBlockCanvas.nativeElement.getContext('2d');
 
-    this.context.scale(20, 20);
-    this.opponentContext.scale(20, 20);
-    this.nextBoxContext.scale(20, 20);
+        this.context.scale(20, 20);
+        this.opponentContext.scale(20, 20);
+        this.nextBoxContext.scale(20, 20);
 
-    this.gameRunning = true;
-    this.playerReset();
-    this.updateScore();
-    this.update();
+        this.playerService.socket.on('updateOpponent', (gameData) => {
+            console.log('Update Opponent Time: '+gameData.data)
+            this.opponent = gameData.data.player;
+            this.opponentArena = gameData.data.arena;
+            this.drawOpponent();
+        });
+
+        this.gameRunning = true;
+        this.playerReset();
+        this.updateScore();
+        this.update();
+    }
   }
 
   ngAfterViewChecked() {
@@ -217,6 +232,9 @@ export class BoardtestComponent implements OnInit {
     this.context.fillStyle = '#000';
     this.context.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
 
+    this.playerService.my_data = {arena: this.arena, player: this.player};
+    this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
+
     this.drawMatrix(this.arena, {x: 0, y: 0}, this.context);
     this.drawMatrix(this.player.matrix, this.player.pos, this.context);
   }
@@ -261,7 +279,7 @@ export class BoardtestComponent implements OnInit {
             }
         });
     });
-    this.updateOpponent();
+    // this.updateOpponent();
   }
 
   playerDrop() {
@@ -274,7 +292,7 @@ export class BoardtestComponent implements OnInit {
         this.updateScore();
     }
     this.dropCounter = 0; 
-    this.updateOpponent();
+    // this.updateOpponent();
   }
 
   playerMove(offset) {
@@ -282,7 +300,7 @@ export class BoardtestComponent implements OnInit {
     if (this.collide(this.arena, this.player)) {
         this.player.pos.x -= offset;
     }
-    this.updateOpponent();
+    // this.updateOpponent();
   }
 
   playerReset() {
@@ -297,7 +315,7 @@ export class BoardtestComponent implements OnInit {
         this.arena.forEach(row => row.fill(0));
         this.updateScore();
     }
-    this.updateOpponent();
+    // this.updateOpponent();
   }
 
   playerRotate(dir) {
@@ -313,7 +331,7 @@ export class BoardtestComponent implements OnInit {
             return;
         }
     }
-    this.updateOpponent();
+    // this.updateOpponent();
   }
 
   randomPiece(){
@@ -364,22 +382,18 @@ export class BoardtestComponent implements OnInit {
       this.playerDrop();
     }
   
-    this.playerService.my_data = this.dropCounter;
-  
     this.lastTime = time;
-  
-    // this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
   
     this.draw();
     // requestAnimationFrame(this.update);
     if(this.gameRunning) requestAnimationFrame(this.update.bind(this));
     }
 
-  updateOpponent() {
-    this.opponent = this.player;
-    this.opponentArena = this.arena;
-    this.drawOpponent();
-    }
+//   updateOpponent() {
+//     this.opponent = this.player;
+//     this.opponentArena = this.arena;
+//     this.drawOpponent();
+//     }
 
   updateScore() {
     // document.getElementById('score').innerText = this.player.score;

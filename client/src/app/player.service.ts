@@ -16,8 +16,8 @@ export class PlayerService {
   gameId: String;
   opponentSocket: String;
 
-  my_data: number;
-  opponent_data: number;
+  my_data: any;
+  opponent_data: any;
 
   constructor() {
     return PlayerService.instance = PlayerService.instance || this;

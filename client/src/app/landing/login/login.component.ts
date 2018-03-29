@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
 
         this.playerService.connect();
 
-        this._router.navigate(['/stats']);
+        this._router.navigate(['/lobby']);
       }
     });
   }
