@@ -81,9 +81,9 @@ export class BoardtestComponent implements OnInit {
     }catch(err) {}
   }
 
-  arena = this.createMatrix(12, 20);
+    arena = this.createMatrix(12, 20);
 
-  colors = [
+    colors = [
     null,
     '#FF0D72',
     '#0DC2FF',
@@ -93,28 +93,28 @@ export class BoardtestComponent implements OnInit {
     '#FFE138',
     '#3877FF',
     '#4c4c4c',
-  ];
+    ];
 
-  context;
+    context;
 
-  gameRunning = false;
+    gameRunning = false;
 
-  nextBoxContext;
+    nextBoxContext;
 
-  nextPiece = {
+    nextPiece = {
     pos: {x: 0, y: 0},
     matrix: this.randomPiece()
-  }
+    }
 
-  NextPieceBox = this.createMatrix(5,5);
+    NextPieceBox = this.createMatrix(5,5);
 
-  opponentArena = this.createMatrix(12, 20);
+    opponentArena = this.createMatrix(12, 20);
 
-  opponentContext;
+    opponentContext;
 
-  dropCounter = 0;
-  dropInterval = 1000;
-  lastTime = 0;
+    dropCounter = 0;
+    dropInterval = 1000;
+    lastTime = 0;
 
     player = {
         pos: {x: 0, y: 0},
@@ -130,12 +130,12 @@ export class BoardtestComponent implements OnInit {
         sabotage: 0
     }
 
-  opponent = {
-    pos: {x: 0, y:0},
-    matrix: null,
-    score: 0,
-    lines: 0
-  }
+    opponent = {
+        pos: {x: 0, y:0},
+        matrix: null,
+        score: 0,
+        lines: 0
+    }
 
   animateMe() {
       this.state = (this.state === 'small' ? 'large' : 'small');
