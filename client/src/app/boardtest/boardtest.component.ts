@@ -308,8 +308,9 @@ export class BoardtestComponent implements OnInit {
 
   endOfGame() {
     console.log(this.player)
-    this.player.score = 0;
-    this.player.lines = 0;
+    this.gameRunning = false;
+    this.playerService.updateGameData(this.player);
+    
   }
 
   hardDrop() {
