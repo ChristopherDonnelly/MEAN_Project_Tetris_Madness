@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import { PlayerService } from '../player.service';
 
 @Component({
   selector: 'app-board',
@@ -6,43 +7,83 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-
-  constructor() {
-    this.canvas = document.getElementById('tetris');
-      this.context = this.canvas.getContext('2d');
-      this.addEventListener();
-
-      //test
-      this.playerReset();
-      this.updateScore();  
-      this.update();
-   }
-
-  ngOnInit() {
+  @ViewChild('tetris') private canvas: ElementRef;
+  @ViewChild('opponentCanvas') private opponentCanvas: ElementRef;
+  @ViewChild('nextBlockCanvas') private nextBlockCanvas: ElementRef;
+  constructor(
+    private playerService: PlayerService
+  ) {
+    this.addEventListener();
+    
   }
+  
+  ngOnInit() {
+    this.context = this.canvas.nativeElement.getContext('2d');
+    this.opponentContext = this.opponentCanvas.nativeElement.getContext('2d');
+    this.nextBoxContext = this.nextBlockCanvas.nativeElement.getContext('2d');
+
+    this.context.scale(20, 20);
+    this.opponentContext.scale(20, 20);
+    this.nextBoxContext.scale(20, 20);
+    
+    this.gameRunning = true;
+    this.playerReset();
+    this.updateScore();  
+    this.update();
+  }
+  
+  ngAfterViewChecked(){
+    try{
+    }catch(err){}
+  } 
+
   arena = this.createMatrix(12, 20);
-  canvas;
+  nextPiece = {
+    pos: {x: 0, y: 0},
+    matrix: this.randomPiece()
+  }
+
+  NextPieceBox = this.createMatrix(5,5);
   context;
+  opponent = {
+    pos: {x: 0, y:0},
+    matrix: null,
+    score: 0,
+    lines: 0
+}
+  opponentArena = this.createMatrix(12, 20);
+  opponentContext;
+  nextBoxContext;
+
   
   dropCounter = 0;
   dropInterval = 1000;
   lastTime = 0;
-  
+
+  gameRunning = false;
+
   colors = [
       null,
-      'red',
-      'orange',
-      'pink',
-      'green',
-      'blue',
-      'purple'
+      '#FF0D72',
+      '#0DC2FF',
+      '#0DFF72',
+      '#F538FF',
+      '#FF8E0D',
+      '#FFE138',
+      '#3877FF'
   ]
 
   player = {
       pos: {x: 0, y: 0}, // player has a position, which is the value of the offset
-      matrix: this.createPiece('T'), 
-      score: 0
+      matrix: null, 
+      score: 0,
+      lines: 0,
+      singles: 0,
+      doubles: 0,
+      triples: 0,
+      quadruples: 0
   }
+
   addEventListener(){
     document.addEventListener('keydown', event => { 
         // move player
@@ -55,7 +96,7 @@ export class BoardComponent implements OnInit {
         else if (event.keyCode === 40) { // DOWN
             this.playerDrop();
         }
-        else if (event.keyCode === 81) { // Q, rotate clockwise
+        else if (event.keyCode === 38 || event.keyCode === 81) { // UP or Q, rotate clockwise
             this.playerRotate(-1);
         }
         else if (event.keyCode === 87) { // W, rotate counter-clockwise
@@ -65,7 +106,8 @@ export class BoardComponent implements OnInit {
 }
 
 arenaSweep() {
-    let rowCount = 1;
+    let rowCount = 0;
+    let pointsMultiplier = 1;
     outer: for (let y = this.arena.length - 1; y > 0; --y) {
         for (let x = 0; x < this.arena[y].length; ++x) {
             if (this.arena[y][x] === 0) {
@@ -76,16 +118,30 @@ arenaSweep() {
         const row = this.arena.splice(y, 1)[0].fill(0);
         this.arena.unshift(row);
         ++y;
-
-        this.player.score += rowCount * 10;
-        rowCount *= 2;
+        
+        rowCount += 1;
+        this.player.lines += 1;
+        this.player.score += rowCount * 10 * pointsMultiplier;
+        pointsMultiplier *= 2;
+    }
+    if (rowCount === 1) {
+      this.player.singles += 1;
+    }
+    else if (rowCount == 2) {
+      this.player.doubles += 1;
+    }
+    else if (rowCount == 3) {
+      this.player.triples += 1;
+    }
+    else {
+      this.player.quadruples += 1;
     }
 }   
 collide(arena, player) {
-    const [m, o] = [player.matrix, player.pos]; // matrix, player's position
-    
-    for (let y = 0; y < m.length; y++) {
-        for (let x = 0; x < m[y].length; x++) {
+    const m = player.matrix;
+    const o = player.pos;
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
             if (m[y][x] !== 0 && // when BOTH player &
                 (arena[y + o.y] && 
                 arena[y + o.y][x + o.x]) !== 0) {  // arena are not 0, they collide
@@ -155,24 +211,48 @@ createPiece(type) {
 }
 draw() {
     this.context.fillStyle = '#000';
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
 
-    this.drawMatrix(this.arena, {x: 0, y: 0});
-    this.drawMatrix(this.player.matrix, this.player.pos);
+    this.drawMatrix(this.arena, {x: 0, y: 0}, this.context);
+    this.drawMatrix(this.player.matrix, this.player.pos, this.context);
 }
-drawMatrix(matrix, offset) {
+drawMatrix(matrix, offset, currentContext) {
     matrix.forEach((row, y) => {
         row.forEach((value, x) => { 
-            if (value != 0) {  // if value is not 0 => color
-                this.context.fillStyle = this.colors[value];
-                this.context.fillRect(x + offset.x, // context.fillRect(x, y, width, height)
+            if (value !== 0) {  // if value is not 0 => color
+                currentContext.fillStyle = this.colors[value];
+                currentContext.fillRect(x + offset.x, // context.fillRect(x, y, width, height)
                                 y + offset.y, 
                                 1, 1) 
             }
         });
     });
 }
-// the above will copy our pieces (so non-0's in piece matrices) to the arena
+drawNext() {
+  this.nextBoxContext.fillStyle = '#000';
+  this.nextBoxContext.fillRect(0, 0, 100, 100); // hard coded
+  this.drawMatrix(this.NextPieceBox, {x: 0, y: 0}, this.nextBoxContext);
+  this.drawMatrix(this.nextPiece.matrix, this.nextPiece.pos, this.nextBoxContext);
+}
+
+drawOpponent() {
+  this.opponentContext.fillStyle = '#000';
+  this.opponentContext.fillRect(0, 0, 240, 400); // hard coded
+  this.drawMatrix(this.opponentArena, {x: 0, y:0}, this.opponentContext);
+  this.drawMatrix(this.opponent.matrix, this.opponent.pos, this.opponentContext);
+} 
+
+endOfGame() {
+  this.player.score = 0;
+  this.player.lines = 0;
+}
+
+updateOpponent() {
+  this.opponent = this.player;
+  this.opponentArena = this.arena;
+  this.drawOpponent();
+} 
+
 merge(arena, player){
     this.player.matrix.forEach((row, y) => {
         row.forEach((value, x) => { // if it's a 0, we ignore it
@@ -181,6 +261,7 @@ merge(arena, player){
             }
         });
     });
+    this.updateOpponent();
 }
 playerDrop() {
     this.player.pos.y++;
@@ -192,26 +273,31 @@ playerDrop() {
         this.arenaSweep();
         this.updateScore();
     }
-    this.dropCounter = 0; // reset dropCounter, b/c we don't want another drop to happen immediately after, we want a 1-sec delay 
+    this.dropCounter = 0; // reset dropCounter, b/c we don't want another drop to happen immediately after, we want a 1-sec delay
+    this.updateOpponent(); 
 }
-playerMove(direction) {
-    this.player.pos.x += direction; // if we have moved L or R
+playerMove(offset) {
+    this.player.pos.x += offset; // if we have moved L or R
     if (this.collide(this.arena, this.player)){ // and we collided in the arena
-        this.player.pos.x -= direction; // then move back;
+        this.player.pos.x -= offset; // then move back;
     }
+    this.updateOpponent();
 }
 playerReset() {
-    const pieces = 'ILJOTSZ'; // list all available pieces in string
-    this.player.matrix = this.createPiece(pieces[pieces.length * Math.random() | 0]); // select rand letter = random piece
+    this.player.matrix = this.nextPiece.matrix;
+    this.nextPiece.matrix = this.randomPiece();
+    this.updateNext();
     this.player.pos.y = 0; // put player at the top
-    this.player.pos.x = (this.arena[0].length/2 | 0) - (this.player.matrix[0].length/2 | 0);
+    this.player.pos.x = Math.floor(this.arena[0].length/2) - Math.floor(this.player.matrix[0].length/2);
 
-    if (this.collide(this.arena, this.player)) { // if we collide when we reset the player, then the game is over
+    if (this.collide(this.arena, this.player)) { // if we collide when we reset the player
+    this.endOfGame(); // then the game is over
     this.arena.forEach(row => row.fill(0)); // clear arena
-    this.player.score = 0;
     this.updateScore();
     }
+    this.updateOpponent();
 }
+
 playerRotate(direction) {
     const pos = this.player.pos.x; // save the position
     let offset = 1;
@@ -227,11 +313,17 @@ playerRotate(direction) {
             return;
         }
     }
+    this.updateOpponent();
+}
+
+randomPiece() {
+  const pieces = 'TJLOSZI'; // list all available pieces in string
+  return this.createPiece(pieces[Math.floor(pieces.length * Math.random())]);
 }
 
 rotate(matrix, direction) {
-    for (let y = 0; y < matrix.length; y++) {
-        for (let x = 0; x < y; x++) {
+    for (let y = 0; y < matrix.length; ++y) {
+        for (let x = 0; x < y; ++x) {
             [
                 matrix[x][y],  // [a, b] = [b, a] is the same thing as setting a var tempt to swap vals of a & b
                 matrix[y][x]
@@ -249,19 +341,47 @@ rotate(matrix, direction) {
         matrix.reverse(); // else we just reverse the matrix, or the y values (entire rows inside the matrix)
     }
 }
-update(time = 0) {
-    const deltaTime = time - this.lastTime;
-    this.lastTime = time;
+// update(time = 0) {
+//     const deltaTime = time - this.lastTime;
+    
+//     this.dropCounter += deltaTime;
+//     if (this.dropCounter > this.dropInterval) { // if the difference is greater than the interval, 
+//       this.playerDrop();                   // drop the piece
+//     }
+//     this.lastTime = time;
 
-    this.dropCounter += deltaTime;
-    if (this.dropCounter > this.dropInterval) { // if the difference is greater than the interval, 
-        this.playerDrop();                   // drop the piece
-    }
+//     this.draw();
+//     requestAnimationFrame(this.update);
+// }
+update = (time = 0) => {
+  const deltaTime = time - this.lastTime;
 
-    this.draw();
-    requestAnimationFrame(this.update);
+  this.dropCounter += deltaTime;
+
+  if (this.dropCounter > this.dropInterval) {
+    this.playerDrop();
+  }
+
+  this.playerService.my_data = this.dropCounter;
+
+  this.lastTime = time;
+
+  // this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
+
+  this.draw();
+  // requestAnimationFrame(this.update);
+  if(this.gameRunning) requestAnimationFrame(this.update.bind(this));
 }
 updateScore() {
-    document.getElementById('score').innerText = this.player.score.toString();
+  // document.getElementById('score').innerText = this.player.score.toString();
+  // document.getElementById('lines').innerText = this.player.lines.toString();
 }
+updateNext() {
+  this.NextPieceBox.forEach(row => row.fill(0));
+  this.nextPiece.pos.y = (this.NextPieceBox.length / 2 | 0) - (this.nextPiece.matrix.length / 2 | 0);
+    this.nextPiece.pos.x = (this.NextPieceBox[0].length / 2 | 0) - (this.nextPiece.matrix[0].length / 2 | 0);
+    this.merge(this.NextPieceBox, this.nextPiece);
+    this.drawNext();
+}
+
 }

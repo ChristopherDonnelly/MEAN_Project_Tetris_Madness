@@ -9,6 +9,7 @@ import { ChatComponent } from './lobby/chat/chat.component';
 import { StatsComponent } from './stats/stats.component';
 import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 import { BoardComponent } from './board/board.component';
+import { BoardtestComponent } from './boardtest/boardtest.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
     ]
   },
   {path: 'stats', component: StatsComponent},
-  { path: 'tetris-board', component: BoardComponent },
+  { path: 'tetris-board', component: BoardtestComponent }, // temp switch
   { path: '', pathMatch: 'full', redirectTo: '/landing/login' },
   { path: '**', component: PodComponent }
 ];
