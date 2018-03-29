@@ -23,7 +23,7 @@ import { BoardComponent } from './board/board.component';
 
 import { ChartsModule } from 'ng2-charts';
 import { BoardtestComponent } from './boardtest/boardtest.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 @NgModule({
   declarations: [
@@ -40,6 +40,7 @@ import { BoardtestComponent } from './boardtest/boardtest.component';
     BoardtestComponent
   ],
   imports: [
+    BrowserAnimationsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

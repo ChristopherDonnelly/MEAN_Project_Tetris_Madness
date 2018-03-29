@@ -1,10 +1,21 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { PlayerService } from '../player.service';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 @Component({
   selector: 'app-boardtest',
   templateUrl: './boardtest.component.html',
-  styleUrls: ['./boardtest.component.css']
+  styleUrls: ['./boardtest.component.css'],
+  animations: [
+    trigger('myAwesomeAnimation', [
+      state('small', style({
+        transform: 'scale(1)',
+      })),
+      state('large', style({
+        transform: 'scale(1.2)',
+      })),
+    ]),
+  ]
 })
 export class BoardtestComponent implements OnInit {
   @ViewChild('tetris') private canvas: ElementRef;
@@ -341,20 +352,6 @@ export class BoardtestComponent implements OnInit {
     }
   }
 
-  // update(time = 0) {
-  //   const deltaTime = time - this.lastTime;
-
-  //   this.dropCounter += deltaTime;
-  //   if (this.dropCounter > this.dropInterval) {
-  //       this.playerDrop();
-  //   }
-
-  //   this.lastTime = time;
-
-  //   this.draw();
-  //   requestAnimationFrame(this.update);
-  // } 
-
   update = (time = 0) => {
     const deltaTime = time - this.lastTime;
   
@@ -371,7 +368,7 @@ export class BoardtestComponent implements OnInit {
     // this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
   
     this.draw();
-    // requestAnimationFrame(this.update);
+    // requestAnimationFrame(this.update); 
     if(this.gameRunning) requestAnimationFrame(this.update.bind(this));
     }
 
@@ -384,6 +381,7 @@ export class BoardtestComponent implements OnInit {
   updateScore() {
     // document.getElementById('score').innerText = this.player.score;
     // document.getElementById('lines').innerText = this.player.lines;
+    // we used angular's variable injection to display score/lines cleared {{ }}
   }
 
   updateNext() {
