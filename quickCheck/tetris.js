@@ -1,22 +1,23 @@
-// const canvas = document.getElementById('tetris');
-// const context = canvas.getContext('2d');
+const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
 
-// const opponentCanvas = document.getElementById('opponentCanvas');
-// const opponentContext = opponentCanvas.getContext('2d');
+const opponentCanvas = document.getElementById('opponentCanvas');
+const opponentContext = opponentCanvas.getContext('2d');
 
-// const nextBlockCanvas = document.getElementById('nextBlockCanvas');
-// const nextBoxContext = nextBlockCanvas.getContext('2d');
+const nextBlockCanvas = document.getElementById('nextBlockCanvas');
+const nextBoxContext = nextBlockCanvas.getContext('2d');
 
-// context.scale(20, 20);
-// opponentContext.scale(20, 20);
-// nextBoxContext.scale(20, 20);
+context.scale(20, 20);
+opponentContext.scale(20, 20);
+nextBoxContext.scale(20, 20);
 
 function arenaSweep() {
     let rowCount = 0;
     let pointsMultiplier = 1;
+    console.log(player.sabotage);
     outer: for (let y = arena.length -1; y > 0; --y) {
         for (let x = 0; x < arena[y].length; ++x) {
-            if (arena[y][x] === 0) {
+            if (arena[y][x] === 0 || arena[y][x] === 8) {
                 continue outer;
             }
         }
@@ -29,18 +30,23 @@ function arenaSweep() {
         player.score += rowCount * 10 * pointsMultiplier;
         pointsMultiplier *= 2;
     }
-    if (rowCount == 1) {
-        player.singles += 1;
-    }
-    else if (rowCount == 2) {
-        player.doubles += 1;
-    }
-    else if (rowCount == 3) {
-        player.triples += 1;
-    }
-    else {
-        player.quadruples += 1;
-    }
+    if (rowCount == 1) {player.singles += 1;}
+    else if (rowCount == 2) {player.doubles += 1;}
+    else if (rowCount == 3) {player.triples += 1;}
+    else {player.quadruples += 1;}
+    levelUp();
+}
+
+function levelUp() {
+    if (player.lines == 2) {player.level = 2;}
+    if (player.lines == 5) {player.level = 3;}
+    if (player.lines == 8) {player.level = 4;}
+    if (player.lines == 12) {player.level = 5;}
+    if (player.lines == 16) {player.level = 6;}
+    if (player.lines == 21) {player.level = 7;}
+    if (player.lines == 27) {player.level = 8;}
+    if (player.lines == 33) {player.level = 9;}
+    if (player.lines == 40) {player.level = 10;}
 }
 
 function collide(arena, player) {
@@ -138,14 +144,14 @@ function drawNext() {
     nextBoxContext.fillRect(0, 0, nextBlockCanvas.width,nextBlockCanvas.height);
     drawMatrix(NextPieceBox, {x: 0, y:0}, nextBoxContext);
     drawMatrix(nextPiece.matrix, nextPiece.pos, nextBoxContext);
-} 
+}
 
 function drawOpponent() {
     opponentContext.fillStyle = '#000';
     opponentContext.fillRect(0, 0, opponentCanvas.width,opponentCanvas.height);
     drawMatrix(opponentArena, {x: 0, y:0}, opponentContext);
     drawMatrix(opponent.matrix, opponent.pos, opponentContext);
-} 
+}
 
 function updateOpponent() {
     opponent = player;
@@ -160,8 +166,20 @@ function merge(arena, player) {
                 arena[y + player.pos.y][x + player.pos.x] = value;
             }
         });
-    });
+    });    
+    addConcrete(arena);
     updateOpponent();
+}
+
+function addConcrete(arena){
+    let concrete = 0;
+    for (let y = arena.length - 1; y >=0; y--) {
+        if (arena[y][0] === 8){concrete += 1}
+    };
+    for (let i=0; i < (player.sabotage - concrete); i++) {
+        arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);  /////// needs to run only once and not during each merge
+        arena.shift();
+    }
 }
 
 function rotate(matrix, dir) {
@@ -196,6 +214,24 @@ function playerDrop() {
     dropCounter = 0;
     updateOpponent();
 }
+
+function hardDrop() {
+    let movement = arena.length-1;
+    while(movement > 0) {
+        player.pos.y++;
+        if (collide(arena, player)) {
+            player.pos.y--;
+            merge(arena, player);
+            playerReset();
+            arenaSweep(); 
+            updateScore();
+            dropCounter = 0;
+            updateOpponent();
+            break;
+        }
+        movement--;
+    }    
+}   
 
 function playerMove(offset) {
     player.pos.x += offset;
@@ -244,9 +280,12 @@ function playerRotate(dir) {
 let dropCounter = 0;
 let dropInterval = 1000;
 
+
 let lastTime = 0;
 function update(time = 0) {
     const deltaTime = time - lastTime;
+
+    dropInterval = 1000 / (player.level);
 
     dropCounter += deltaTime;
     if (dropCounter > dropInterval) {
@@ -262,19 +301,26 @@ function update(time = 0) {
 function updateScore() {
     document.getElementById('score').innerText = player.score;
     document.getElementById('lines').innerText = player.lines;
+    document.getElementById('level').innerText = player.level;
 }
 
 function updateNext() {
     NextPieceBox.forEach(row => row.fill(0));
     nextPiece.pos.y = (NextPieceBox.length / 2 | 0) - (nextPiece.matrix.length / 2 | 0);
     nextPiece.pos.x = (NextPieceBox[0].length / 2 | 0) - (nextPiece.matrix[0].length / 2 | 0);
-    merge(NextPieceBox, nextPiece);
+    nextPiece.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                NextPieceBox[y + nextPiece.pos.y][x + nextPiece.pos.x] = value;
+            }
+        });
+    }); 
     drawNext();
 }
 
 function endOfGame() {
-    player.score = 0; 
-    player.lines = 0;
+    // ADD: current player stats sent to database
+    // ADD: send "end of game" to socket
 }
 
 document.addEventListener('keydown', event => {
@@ -284,12 +330,30 @@ document.addEventListener('keydown', event => {
         playerMove(1);
     } else if (event.keyCode === 40) {
         playerDrop();
-    } else if (event.keyCode === 81) {
+    } else if (event.keyCode === 81 || event.keyCode === 38) {
         playerRotate(-1);
     } else if (event.keyCode === 87) {
         playerRotate(1);
+    } else if (event.keyCode == 32) {
+        hardDrop();
     }
 });
+
+function initializePlayer() {
+    return {
+    pos: {x: 0, y: 0},
+    matrix: null,
+    score: 0,
+    result: "win",
+    level: 1,
+    lines: 0,
+    singles: 0,
+    doubles: 0,
+    triples: 0,
+    quadruples: 0,
+    sabotage: 0
+    }
+}
 
 const colors = [
     null,
@@ -300,8 +364,10 @@ const colors = [
     '#FF8E0D',
     '#FFE138',
     '#3877FF',
-    '#4c4c4c',
+    '#6b6767',
 ];
+
+let player = initializePlayer();
 
 const arena = createMatrix(12, 20);
 let opponentArena = createMatrix(12, 20);
@@ -312,17 +378,6 @@ let nextPiece = {
     matrix: randomPiece()
 }
 
-const player = {
-    pos: {x: 0, y: 0},
-    matrix: null,
-    score: 0,
-    lines: 0,
-    singles: 0,
-    doubles: 0,
-    triples: 0,
-    quadruples: 0
-};
-
 let opponent = {
     pos: {x: 0, y:0},
     matrix: null,
@@ -330,6 +385,7 @@ let opponent = {
     lines: 0
 }
 
+initializePlayer();
 playerReset();
 updateScore();
 update();
