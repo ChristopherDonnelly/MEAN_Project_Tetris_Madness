@@ -35,6 +35,9 @@ export class BoardtestComponent implements OnInit {
     if(!this.playerService.username){
         this._router.navigate(['/']);
     }else{
+
+        console.log(this.playerService)
+
         this.addEventListener();
         this.context = this.canvas.nativeElement.getContext('2d');
         this.opponentContext = this.opponentCanvas.nativeElement.getContext('2d');
@@ -45,10 +48,15 @@ export class BoardtestComponent implements OnInit {
         this.nextBoxContext.scale(20, 20);
 
         this.playerService.socket.on('updateOpponent', (gameData) => {
-            console.log('Update Opponent Time: '+gameData.data)
+            // console.log('Update Opponent Time: '+gameData.data)
             this.opponent = gameData.data.player;
             this.opponentArena = gameData.data.arena;
             this.drawOpponent();
+        });
+
+        this.playerService.socket.on('playerExit', (gameData) => {
+            console.log(gameData.message)
+            this.gameRunning = false;
         });
 
         this.gameRunning = true;
@@ -278,6 +286,7 @@ export class BoardtestComponent implements OnInit {
   }
 
   endOfGame() {
+    console.log(this.player)
     this.player.score = 0;
     this.player.lines = 0;
   }

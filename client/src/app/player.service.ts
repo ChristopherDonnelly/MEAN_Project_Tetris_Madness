@@ -47,4 +47,12 @@ export class PlayerService {
     this.opponentSocket = gameData.userSocket;
   }
 
+  updateGameData(playerData){
+    this['score'] = playerData.score;
+    this['single_clears'] = playerData.singles;
+    this['double_clears'] = playerData.doubles;
+    this['triple_clears'] = playerData.triples;
+    this['tetris_clears'] = playerData.quadruples;
+  }
+
 }

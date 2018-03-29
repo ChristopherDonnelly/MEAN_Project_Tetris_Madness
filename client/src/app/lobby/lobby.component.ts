@@ -38,47 +38,10 @@ export class LobbyComponent implements OnInit {
       });
 
       this.playerService.socket.on('startGame', (gameData) => {
-        // this.gameRunning = true;
-        // this.update();
         this._router.navigate(['/tetris-board']);
       });
   
-      this.playerService.socket.on('updateOpponent', (gameData) => {
-        console.log('Update Opponent Time: '+gameData.data)
-        this.playerService.opponent_data = gameData.data;
-      });
-  
-      this.playerService.socket.on('playerExit', (gameData) => {
-        console.log(gameData.message)
-        this.gameRunning = false;
-      });
-  
     }
-  }
-
-  dropCounter = 0;
-  dropInterval = 1000;
-
-  lastTime = 0;
-  gameRunning = false;
-
-  update = (time = 0) => {
-    const deltaTime = time - this.lastTime;
-
-    this.dropCounter += deltaTime;
-
-    if (this.dropCounter > this.dropInterval) {
-      this.dropCounter = 0;
-    }
-
-    this.playerService.my_data = this.dropCounter;
-
-    this.lastTime = time;
-
-    this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
-
-    //requestAnimationFrame(this.update);
-    if(this.gameRunning) requestAnimationFrame(this.update.bind(this));
   }
 
   startGame(){
