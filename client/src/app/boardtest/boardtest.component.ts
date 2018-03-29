@@ -8,6 +8,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   selector: 'app-boardtest',
   templateUrl: './boardtest.component.html',
   styleUrls: ['./boardtest.component.css'],
+
   animations: [
     trigger('myAwesomeAnimation', [
       state('small', style({
@@ -16,10 +17,19 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
       state('large', style({
         transform: 'scale(1.2)',
       })),
+
+      transition('small <=> large', animate('1000ms ease-in', keyframes([
+          style({opacity: 0, transform: 'translateY(-75%)', offset: 0}),
+          style({opacity: 1, transform: 'translateY(35%)', offset: .5}),
+          style({opacity: 0, transform: 'translateY(0)', offset: 1 }),
+      ]))),
     ]),
   ]
 })
 export class BoardtestComponent implements OnInit {
+
+    state: string = 'small'
+
   @ViewChild('tetris') private canvas: ElementRef;
   @ViewChild('opponentCanvas') private opponentCanvas: ElementRef;
   @ViewChild('nextBlockCanvas') private nextBlockCanvas: ElementRef;
@@ -98,22 +108,29 @@ export class BoardtestComponent implements OnInit {
   dropInterval = 1000;
   lastTime = 0;
 
-  player = {
-    pos: {x: 0, y: 0},
-    matrix: null,
-    score: 0,
-    lines: 0,
-    singles: 0,
-    doubles: 0,
-    triples: 0,
-    quadruples: 0
-  };
+    player = {
+        pos: {x: 0, y: 0},
+        matrix: null,
+        score: 0,
+        result: "win",
+        level: 1,
+        lines: 0,
+        singles: 0,
+        doubles: 0,
+        triples: 0,
+        quadruples: 0,
+        sabotage: 0
+    }
 
   opponent = {
     pos: {x: 0, y:0},
     matrix: null,
     score: 0,
     lines: 0
+  }
+
+  animateMe() {
+      this.state = (this.state === 'small' ? 'large' : 'small');
   }
 
   addEventListener(){
@@ -133,6 +150,9 @@ export class BoardtestComponent implements OnInit {
         }
         else if (event.keyCode === 87) { // W, rotate counter-clockwise
             this.playerRotate(1);
+        }
+        else if (event.keyCode == 32) { // SPACEBAR
+            this.hardDrop();
         }
     }); 
   }
@@ -167,6 +187,7 @@ export class BoardtestComponent implements OnInit {
     else {
         this.player.quadruples += 1;
     }
+    this.levelUp();
   }
 
   collide(arena, player) {
@@ -282,6 +303,35 @@ export class BoardtestComponent implements OnInit {
     this.player.lines = 0;
   }
 
+  hardDrop() {
+    let movement = this.arena.length-1;
+    while(movement > 0) {
+        this.player.pos.y++;
+        if (this.collide(this.arena, this.player)) {
+            this.player.pos.y--;
+            this.merge(this.arena, this.player);
+            this.playerReset();
+            this.arenaSweep(); 
+            this.updateScore();
+            this.dropCounter = 0;
+            break;
+        }
+        movement--;
+    }
+  }
+
+  levelUp() {
+    if (this.player.lines == 2) {this.player.level = 2;}
+    if (this.player.lines == 5) {this.player.level = 3;}
+    if (this.player.lines == 8) {this.player.level = 4;}
+    if (this.player.lines == 12) {this.player.level = 5;}
+    if (this.player.lines == 16) {this.player.level = 6;}
+    if (this.player.lines == 21) {this.player.level = 7;}
+    if (this.player.lines == 27) {this.player.level = 8;}
+    if (this.player.lines == 33) {this.player.level = 9;}
+    if (this.player.lines == 40) {this.player.level = 10;}
+  }
+
   merge(arena, player) {
     player.matrix.forEach((row, y) => {
         row.forEach((value, x) => {
@@ -372,7 +422,9 @@ export class BoardtestComponent implements OnInit {
 
   update = (time = 0) => {
     const deltaTime = time - this.lastTime;
-  
+    
+    this.dropInterval = 1000 / (this.player.level);
+
     this.dropCounter += deltaTime;
   
     if (this.dropCounter > this.dropInterval) {
@@ -395,6 +447,7 @@ export class BoardtestComponent implements OnInit {
   updateScore() {
     // document.getElementById('score').innerText = this.player.score;
     // document.getElementById('lines').innerText = this.player.lines;
+    // document.getElementById('level').innerText = this.player.level;
     // we used angular's variable injection to display score/lines cleared {{ }}
   }
 
