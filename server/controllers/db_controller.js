@@ -3,7 +3,7 @@ const User = mongoose.model('DB_Model');
 
 module.exports = {
     findAll: (req, res) => {
-        User.find({}, (err, users) => {
+        User.find({}, { __v:0, createdAt:0, updatedAt:0 }, (err, users) => {
             if(err){
                 res.json({message: "Error", error: err});
             }else{
@@ -18,6 +18,17 @@ module.exports = {
                 res.json({message: "Error", error: err});
             }else{
                 res.json({message: "Success", user: user});
+            }
+        });
+    },
+    findOneGame: (req, res) => {
+        console.log('Get User By Id: ' + req.params.id)
+        console.log('Get Game By Id: ' + req.params.game_id)
+        User.findById({ _id: req.params.id },  { games: { $elemMatch: { game_id: req.params.game_id }}}, (err, game) => {
+            if(err){
+                res.json({message: "Error", error: err});
+            }else{
+                res.json({message: "Success", game});
             }
         });
     },
@@ -67,7 +78,7 @@ module.exports = {
     login: (req, res) => {
         console.log(`Attempt Login User: ${req.body.username}`);
 
-        User.findOne({username: req.body.username}, (err, user) => {
+        User.findOne({username: req.body.username}, { __v:0, createdAt:0, updatedAt:0 }, (err, user) => {
             console.log(err)
             if(err||!user){
                 var user = new User( req.body );
@@ -79,6 +90,9 @@ module.exports = {
                         res.json({message: "Error", error: err});
                     } else {
                         console.log('Successfully created new User: ' + req.body.username);
+                        delete user.__v;
+                        delete user.createdAt;
+                        delete user.updatedAt;
                         res.json({message: "Success", user: user});
                     }
                 });

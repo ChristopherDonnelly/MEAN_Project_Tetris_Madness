@@ -1,1 +1,8 @@
 @import "~bootstrap/dist/css/bootstrap.css";
+
+td {
+    text-align: center;
+}
+td:last-of-type {
+    text-align: left;
+}

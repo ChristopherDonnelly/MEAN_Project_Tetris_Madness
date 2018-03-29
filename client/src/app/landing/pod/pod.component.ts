@@ -30,7 +30,7 @@ export class PodComponent implements OnInit {
     getPlayer.subscribe(data => {
       if(data['message'] == 'Error'){
         console.log(data);
-      }else{
+      }else if(data['user']){
         this.user.username = data['user'].username;
         this.user.score = data['user'].score;
       }

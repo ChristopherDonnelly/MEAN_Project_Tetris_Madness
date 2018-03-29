@@ -44,30 +44,32 @@ io.sockets.on('connection', function (socket) {
     socket.on('createGame', (player) => {
 
         if(gameQueue.gameId==''){
-            let val = (socket.id.length/4);
-            let gameId = socket.id.substring(val, socket.id.length-val);
+            let gameId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            let room = '/'+gameId;
+            myGameRoom = room;
             
+            socket.broadcast.emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ' + player.username + ' started a new game!' });
             console.log('Player: '+player.username+' created room: '+gameId);
 
             gameQueue.gameId = gameId;
             gameQueue.username = player.username;
             gameQueue.userSocket = socket.id;
-            myGameRoom = room;
 
-            socket.emit('gameInfo', gameQueue);
+            socket.emit('gameInfo', { gameId: gameQueue.gameId, username: 'waiting', userSocket: 'waiting' });
 
-            var room = '/'+gameId;
             socket.nickname = room;
             socket.join(room);
 
         }else{
             var room = '/'+gameQueue.gameId;
+            myGameRoom = room;
             
+            socket.broadcast.emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ' + player.username + ' joined a game!' });
             console.log('Player: '+player.username+' joined room: '+gameQueue.gameId);
 
             socket.nickname = room;
             socket.join(room);
-            myGameRoom = room;
+
             socket.emit('gameInfo', gameQueue);
 
             socket.broadcast.to(room).emit('gameInfo', { gameId: gameQueue.gameId, username: player.username, userSocket: socket.id });
@@ -91,7 +93,11 @@ io.sockets.on('connection', function (socket) {
         let currentUser = users.filter( obj => obj.id == socket.id )[0];
         // users = users.filter( obj => obj.id != socket.id );
         if(currentUser){
-            if(myGameRoom) socket.broadcast.to(myGameRoom).emit('playerExit', { message: currentUser.username + ' has left the game.' });
+            console.log(myGameRoom)
+            if(myGameRoom){
+                socket.broadcast.to(myGameRoom).emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ' + currentUser.username + ' left the game!' });
+                socket.broadcast.to(myGameRoom).emit('playerExit', { message: currentUser.username + ' left the game!' });
+            }
             socket.broadcast.emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ', message: currentUser.username + ' has left chat.' });
         }
     });

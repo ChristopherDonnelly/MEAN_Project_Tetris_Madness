@@ -11,7 +11,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 export class LobbyComponent implements OnInit {
 
   constructor(
-    public playerService: PlayerService,
+    private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
     private _httpService: HttpService
@@ -38,8 +38,9 @@ export class LobbyComponent implements OnInit {
       });
 
       this.playerService.socket.on('startGame', (gameData) => {
-        this.gameRunning = true;
-        this.update();
+        // this.gameRunning = true;
+        // this.update();
+        this._router.navigate(['/tetris-board']);
       });
   
       this.playerService.socket.on('updateOpponent', (gameData) => {

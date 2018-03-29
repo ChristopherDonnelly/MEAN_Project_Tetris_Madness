@@ -1,6 +1,7 @@
 #play_layer, #game_test_layer {
     display: inline-block;
     vertical-align: top;
+    width: 40%;
 }
 #game_test_layer {
 

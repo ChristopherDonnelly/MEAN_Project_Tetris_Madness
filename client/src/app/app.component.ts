@@ -11,7 +11,7 @@ import { PlayerService } from './player.service';
 export class AppComponent {
 
   constructor(
-    public playerService: PlayerService
+    private playerService: PlayerService
   ) {}
 
 }
