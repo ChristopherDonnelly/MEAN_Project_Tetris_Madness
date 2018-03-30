@@ -19,7 +19,7 @@ export class PlayerService {
   my_data: any;
   opponent_data: any;
 
-  server: string;
+  server: string = 'http://172.31.29.80:8000';
 
   constructor() {
     return PlayerService.instance = PlayerService.instance || this;
@@ -31,12 +31,10 @@ export class PlayerService {
 
     this.my_data = 1;
     this.opponent_data = 1;
-
-    this.server = 'http://172.31.29.80:8000'
   }
 
   connect(){
-    this.socket = io(this.server);
+    this.socket = io('http://172.31.29.80:8000');
     this.socket.emit('introMessage', { username: this.username, message: ' has entered chat!'});
   }
 
@@ -45,7 +43,7 @@ export class PlayerService {
   // }
 
   joinGame(gameData){
-    this.game_socket = io(this.server+'/'+gameData.gameId);
+    this.game_socket = io('http://172.31.29.80:8000/'+gameData.gameId);
     this.gameId = gameData.gameId;
     this.opponent = gameData.username;
     this.opponentId = gameData.userId;
