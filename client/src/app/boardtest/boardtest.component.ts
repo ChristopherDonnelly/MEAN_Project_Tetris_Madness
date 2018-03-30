@@ -146,6 +146,23 @@ export class BoardtestComponent implements OnInit {
       this.state = (this.state === 'small' ? 'large' : 'small');
   }
 
+  addConcrete(){
+    let concrete = 0;
+    for (let y = this.arena.length - 1; y >= 0; y--) {
+        if (this.arena[y][0] == 8){
+            concrete = concrete + 1;
+        }
+    };
+    for (let i = 0; i < (this.player.sabotage - concrete); i++) {
+        console.log("Sabotage: ", this.player.sabotage);
+        console.log("CONCRETE: ", concrete);
+        this.arena.shift();  
+        this.arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);
+        console.log(this.arena);
+    }
+    console.table("TABLE: ", this.arena);
+  }
+
   addEventListener(){
     document.addEventListener('keydown', (event) => {
         // move player
@@ -177,7 +194,7 @@ export class BoardtestComponent implements OnInit {
     let pointsMultiplier = 1;
     outer: for (let y = this.arena.length -1; y > 0; --y) {
         for (let x = 0; x < this.arena[y].length; ++x) {
-            if (this.arena[y][x] === 0) {
+            if (this.arena[y][x] === 0 || this.arena[y][x] === 8) {
                 continue outer;
             }
         }
@@ -190,6 +207,7 @@ export class BoardtestComponent implements OnInit {
         this.player.score += rowCount * 10 * pointsMultiplier;
         pointsMultiplier *= 2;
     }
+    console.log("ROW COUNT: ", rowCount);
     if (rowCount == 1) {
         this.player.singles += 1;
     }
@@ -199,10 +217,33 @@ export class BoardtestComponent implements OnInit {
     else if (rowCount == 3) {
         this.player.triples += 1;
     }
-    else {
+    else if (rowCount == 4) {
         this.player.quadruples += 1;
     }
+    // ADD: send sabotage to other player if 2+ lines
+    // this.beenSabotaged(rowCount);
+    if (rowCount == 2){
+        this.player.sabotage += 1;
+    }
+    else if (rowCount == 3){
+        this.player.sabotage += 2;
+    }
+    else if (rowCount == 4){
+        this.player.sabotage += 4;
+    }
     this.levelUp();
+  }
+
+  beenSabotaged (rowCount) {
+    // if (rowCount == 2){
+    //     this.player.sabotage += 1;
+    // }
+    // else if (rowCount == 3){
+    //     this.player.sabotage += 2;
+    // }
+    // else if (rowCount == 4){
+    //     this.player.sabotage += 4;
+    // }
   }
 
   collide(arena, player) {
@@ -378,6 +419,7 @@ export class BoardtestComponent implements OnInit {
         });
     });
     // this.updateOpponent();
+    this.addConcrete();
   }
 
   playerDrop() {
@@ -475,12 +517,6 @@ export class BoardtestComponent implements OnInit {
     if(this.gameRunning) requestAnimationFrame(this.update.bind(this));
     }
 
-//   updateOpponent() {
-//     this.opponent = this.player;
-//     this.opponentArena = this.arena;
-//     this.drawOpponent();
-//     }
-
   updateScore() {
     // document.getElementById('score').innerText = this.player.score;
     // document.getElementById('lines').innerText = this.player.lines;
@@ -492,7 +528,13 @@ export class BoardtestComponent implements OnInit {
     this.NextPieceBox.forEach(row => row.fill(0));
     this.nextPiece.pos.y = (this.NextPieceBox.length / 2 | 0) - (this.nextPiece.matrix.length / 2 | 0);
     this.nextPiece.pos.x = (this.NextPieceBox[0].length / 2 | 0) - (this.nextPiece.matrix[0].length / 2 | 0);
-    this.merge(this.NextPieceBox, this.nextPiece);
+    this.nextPiece.matrix.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value !== 0) {
+                this.NextPieceBox[y + this.nextPiece.pos.y][x + this.nextPiece.pos.x] = value;
+            }
+        });
+    });    
     this.drawNext();
   }
 

@@ -8,13 +8,15 @@
 #wrapper {
     margin: 0px auto;
     text-align: left;
+    background-color: black;
+    padding: 20px;
 }
 
 #wrapper h1 {
     margin: 20px 40px 30px;
     font-size: 3em;
-    font-weight: normal;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-weight: lighter;
+    color: white;
 }
 
 div#nav {

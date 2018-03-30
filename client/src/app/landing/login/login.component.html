@@ -1,6 +1,6 @@
 <form method="post" (submit)="login()">
   <label for="username">* Username: 
-    <input type="text" name="username" [(ngModel)]="playerService.username" placeholder="Enter Username">
+    <input type="text" name="username" [(ngModel)]="playerService.username" placeholder="Enter Username" class="username">
   </label>
   <div id="error_layer">
     <p class="red">{{username.errors}}</p>

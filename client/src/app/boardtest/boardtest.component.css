@@ -1,3 +1,18 @@
+body {
+    background: linear-gradient(to bottom right, black, rgba(83, 164, 214, 0.246));
+    padding: 25px 40px;
+    border: 2px solid grey;
+    box-shadow: 2px 2px #4beaff;
+}
+nextBlockCanvas {
+    border: none;
+}
+.nextBlock {
+    width: 118px;
+}
+.nextBlock h3{
+    text-align: center;
+}
 p {
     width: 200px;
     background: lightgray;
@@ -5,4 +20,20 @@ p {
     text-align: center;
     padding: 200px;
     font-size: 1.5em;
+}
+h1 {
+    color: #9cfbf6;
+}
+.player_container, .opponent_container {
+    margin: 70px;
+    vertical-align: top;
+}
+
+.player_container, .opponent_container {
+    display: inline-block;
+}
+
+#tetris, #opponentCanvas {
+    border: 3px solid white;
+    box-shadow: 6px 3px 9px 6px #656e6f;
 }

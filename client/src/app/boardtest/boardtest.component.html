@@ -4,19 +4,30 @@
 </head>
 <body>
   <!-- <p [@myAwesomeAnimation]='state' (click)="animateMe()">I will animate.</p> -->
-  <canvas id="nextBlockCanvas" width="100" height="100" #nextBlockCanvas></canvas>
-  
-  <div id="stats">
-    Score: <div id="score">{{ player.score }}</div><br>
-  </div>
-  <div id="canvases">
-    {{ playerService.username }}
-    <canvas id="tetris" width="240" height="400" #tetris></canvas>
-  
-    {{ playerService.opponent }}
-    {{ opponent.score }}
 
-    <canvas id="opponentCanvas" width="240" height="400" #opponentCanvas></canvas>
+  <div class="nextBlock">
+    <h3>Next Piece</h3>
+    <canvas id="nextBlockCanvas" width="100" height="100" #nextBlockCanvas></canvas>
+  </div>
+
+  <!-- <div id="stats">
+    Score: <br>
+  </div> -->
+  <div id="canvases">
+
+    <div class="player_container">
+      <h1>{{ playerService.username }}</h1>
+      <h3 class="player_info">Score: {{ player.score }}</h3>
+      <h3 class="player_info">Level: {{ player.level }} </h3>
+      <canvas id="tetris" width="240" height="400" #tetris></canvas>
+    </div>
+
+    <div class="opponent_container">
+      <h1>{{ playerService.opponent }}</h1>
+      <h3 class="player_info">Score: {{ opponent.score }}</h3>
+      <h3 class="player_info">Level: {{ opponent.level }}</h3>
+      <canvas id="opponentCanvas" width="240" height="400" #opponentCanvas></canvas>
+    </div>
     
   </div>
 
