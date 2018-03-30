@@ -34,7 +34,7 @@ export class PlayerService {
   }
 
   connect(){
-    this.socket = io('http://172.31.29.80:8000');
+    this.socket = io('http://18.220.170.100:80');
     this.socket.emit('introMessage', { username: this.username, message: ' has entered chat!'});
   }
 
@@ -43,7 +43,7 @@ export class PlayerService {
   // }
 
   joinGame(gameData){
-    this.game_socket = io('http://172.31.29.80:8000/'+gameData.gameId);
+    this.game_socket = io('http://18.220.170.100:80/'+gameData.gameId);
     this.gameId = gameData.gameId;
     this.opponent = gameData.username;
     this.opponentId = gameData.userId;
