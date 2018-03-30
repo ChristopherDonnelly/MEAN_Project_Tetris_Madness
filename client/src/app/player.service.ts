@@ -48,18 +48,24 @@ export class PlayerService {
   }
 
   updateGameData(playerData){
-    if(playerData.won){
-      this['wins'] += 1;
-    }else{
-      this['loses'] += 1;
-    }
-    this['score'] = playerData.score;
-    this['single_clears'] = playerData.singles;
-    this['double_clears'] = playerData.doubles;
-    this['triple_clears'] = playerData.triples;
-    this['tetris_clears'] = playerData.quadruples;
+    let tempWin = 0;
+    let tempLose = 0;
 
-    this['games'].push({
+    if(playerData.won){
+      tempWin = this['wins'] + 1;
+    }else{
+      tempLose = this['loses'] + 1;
+    }
+
+    let update = {
+      wins: tempWin,
+      loses: tempLose,
+      score: playerData.score,
+      single_clears: playerData.singles,
+      double_clears: playerData.doubles,
+      triple_clears: playerData.triples,
+      tetris_clears: playerData.quadruples,
+      games: [{
         won: playerData.won,
         score: playerData.score,
         single_clear: playerData.singles,
@@ -68,7 +74,12 @@ export class PlayerService {
         tetris_clear: playerData.quadruples,
         game_id: this.gameId,
         opponent_id: this.opponentId
-    });
+      }]
+    }
+
+    Object.assign(this, update);
+   
+    return update;
   }
 
 }

@@ -391,18 +391,9 @@ export class BoardtestComponent implements OnInit {
 
     this.gameRunning = false;
 
-    this.playerService.updateGameData(this.player);
+    // this.playerService.updateGameData(this.player);
 
-    console.log(this.playerService)
-
-    // let playerObj = this.playerService;
-
-    // delete playerObj['game_socket'];
-    // delete playerObj['my_data'];
-    // delete playerObj['socket'];
-    // delete playerObj['__proto__'];
-
-    let updatePlayer = this._httpService.updateUser(this.playerService._id, this.playerService['games']);
+    let updatePlayer = this._httpService.updateUser(this.playerService._id, this.playerService.updateGameData(this.player));
 
     updatePlayer.subscribe(data => {
         if(data['message'] == 'Error'){
@@ -410,6 +401,7 @@ export class BoardtestComponent implements OnInit {
         }else{
             console.log('Hurray!')
             console.log(data)
+            console.log('reroute to stats page, send current game #')
         }
     });
   }
