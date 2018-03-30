@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-sm-12 col-lg-5" style="margin-bottom: 40px;">
     <div style="display: block;">
     <canvas baseChart width="400" height="400"
                 [datasets]="lineChartData"
@@ -10,11 +10,12 @@
                 [chartType]="lineChartType"></canvas>
     </div>
   </div>
-  <div class="col-md-6" style="margin-bottom: 10px">
+  <div class="col-md-6 col-sm-12" style="margin-bottom: 10px">
     <table class="table table-responsive table-condensed">
       <tr>
         <th>Game #</th>
         <th>Win/Lost</th>
+        <th>Score</th>
         <th>Opponent</th>
         <th>View Stats</th>
       </tr>
@@ -22,6 +23,7 @@
         <td>{{i + 1}}</td>
         <td *ngIf="game.won">Won</td>
         <td *ngIf="!game.won">Lost</td>
+        <td>{{game.score}}</td>
         <td>{{game.opponent_name}}</td>
         <td><button (click)="loadGameData(i)">View</button></td>
       </tr>
