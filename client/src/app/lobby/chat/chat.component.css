@@ -13,14 +13,28 @@ input[type="text"] {
     overflow-y: auto;
     padding: 0px 5px;
     font-family: arial;
-    font-size: 1em;
-    border: 1px solid darkgray;
+    font-size: 1.3em;
+    background-color: white;
+    border: 2px inset darkgray;
 }
 #messages p {
     margin: 10px 5px;
 }
 #messages p span {
     font-weight: bold;
+}
+input[type="text"], input[type="password"] {
+    width: 50%;
+    height: 25px;
+    font-size: 1em;
+    padding: 0px 5px;
+    box-shadow: 2px 2px mediumseagreen;
+}
+input[type="text"] {
+    height: 37px;
+    width: 61%;
+    font-size: 23px;
+    margin-top: 5%;
 }
 input[type="submit"] {
     cursor: pointer;
@@ -40,4 +54,22 @@ input[type="submit"] {
 }
 .server_msg:before {
     content: '*** ';
+}
+input[type="submit"] {
+    background: linear-gradient(to bottom right, #a2eed5, mediumaquamarine);
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 5px 0px #9E9E9E;
+    margin: 0px 0px 0px 20px;
+    color: darkslategrey;
+    cursor: pointer;
+    font-size: 25px;
+    height: 53px;
+    width: 125px;
+}
+input[type="submit"]:hover {
+    color: lightgoldenrodyellow;
+}
+h3 {
+    margin: 5px 0px;
 }

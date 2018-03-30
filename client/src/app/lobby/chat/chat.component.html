@@ -1,6 +1,6 @@
 <div id="chat_layer">
   <div id="messages_layer">
-    <!-- <textarea [(ngModel)]="allMessages" readonly></textarea> -->
+    <h3>Chat</h3>
     <div id="messages" #messages>
       <p *ngFor="let msg of allMessages" class="{{msg.class}}"><span>{{msg.title}}</span> {{msg.message}}</p>
     </div>

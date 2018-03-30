@@ -76,6 +76,7 @@ export class StatsComponent implements OnInit {
   ];
 
   public loadGameData(gameNum):void {
+    this.showGameNum = gameNum;
     if(this.playerService['games']){
       let game = this.playerService['games'][gameNum];
       let opponent_game;

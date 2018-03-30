@@ -1,4 +1,9 @@
+<div id="nav">
+    <a [routerLink]="['/stats']">Stats</a> |
+    <a [routerLink]="['/']">Logout</a>
+</div>
 <div id="play_layer">
-    <button (click)="startGame()">Play Tetris</button>
+    <button *ngIf="playerService.opponent!='waiting'" (click)="startGame()">Play Tetris</button>
+    <h1 *ngIf="playerService.opponent=='waiting'">Waiting for Opponent</h1>
 </div>
 <app-chat></app-chat>
