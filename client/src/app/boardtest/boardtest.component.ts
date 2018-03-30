@@ -166,7 +166,6 @@ export class BoardtestComponent implements OnInit {
         }
     };
     for (let i = 0; i < (this.player.sabotage - concrete); i++) {
-<<<<<<< HEAD
         console.log("Sabotage: ", this.player.sabotage);
         console.log("CONCRETE: ", concrete);
         // hot fix. All sabotage for now will start will a concrete 
@@ -184,13 +183,6 @@ export class BoardtestComponent implements OnInit {
         this.arena.shift();  
         this.arena.push(rand_blocks);
         console.log(this.arena);
-=======
-        // console.log("Sabotage: ", this.player.sabotage);
-        // console.log("CONCRETE: ", concrete);
-        this.arena.shift();  
-        this.arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);
-        // console.log(this.arena);
->>>>>>> 9bf73ee065685a195ee843661eeeb0cca189ac37
     }
     // console.table("TABLE: ", this.arena);
   }
