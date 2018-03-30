@@ -46,7 +46,7 @@ export class BoardtestComponent implements OnInit {
         this._router.navigate(['/']);
     }else{
 
-        console.log(this.playerService)
+        // console.log(this.playerService)
 
         this.addEventListener();
         this.context = this.canvas.nativeElement.getContext('2d');
@@ -65,7 +65,7 @@ export class BoardtestComponent implements OnInit {
         });
 
         this.playerService.socket.on('playerExit', (gameData) => {
-            console.log(gameData.message)
+            // console.log(gameData.message)
             this.gameRunning = false;
         });
 
@@ -166,13 +166,13 @@ export class BoardtestComponent implements OnInit {
         }
     };
     for (let i = 0; i < (this.player.sabotage - concrete); i++) {
-        console.log("Sabotage: ", this.player.sabotage);
-        console.log("CONCRETE: ", concrete);
+        // console.log("Sabotage: ", this.player.sabotage);
+        // console.log("CONCRETE: ", concrete);
         this.arena.shift();  
         this.arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);
-        console.log(this.arena);
+        // console.log(this.arena);
     }
-    console.table("TABLE: ", this.arena);
+    // console.table("TABLE: ", this.arena);
   }
 
   addEventListener(){
@@ -221,7 +221,7 @@ export class BoardtestComponent implements OnInit {
         this.player.score += rowCount * 10 * pointsMultiplier;
         pointsMultiplier *= 2;
     }
-    console.log("ROW COUNT: ", rowCount);
+    // console.log("ROW COUNT: ", rowCount);
     if (rowCount == 1) {
         this.player.singles += 1;
     }
@@ -387,7 +387,7 @@ export class BoardtestComponent implements OnInit {
   }
 
   savePlayerInfo(){
-    console.log(this.player);
+    // console.log(this.player);
 
     this.gameRunning = false;
 
@@ -397,11 +397,13 @@ export class BoardtestComponent implements OnInit {
 
     updatePlayer.subscribe(data => {
         if(data['message'] == 'Error'){
-            console.log(data['error'].errors.username.message)
+            console.log(data['error'])
         }else{
-            console.log('Hurray!')
-            console.log(data)
-            console.log('reroute to stats page, send current game #')
+            // console.log('Hurray!')
+            // console.log(data)
+            // console.log('reroute to stats page, send current game #')
+
+            this._router.navigate(['/stats', this.playerService['games'].length-1]);
         }
     });
   }

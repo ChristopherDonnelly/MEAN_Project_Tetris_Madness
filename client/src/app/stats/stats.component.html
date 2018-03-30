@@ -14,26 +14,16 @@
     <table class="table table-responsive table-condensed">
       <tr>
         <th>Game #</th>
-        <th>View Stats</th>
-        <th>Win/Lose</th>
-        <th>Score</th>
-        <th>Single Clear</th>
-        <th>Double Clear</th>
-        <th>Triple Clear</th>
-        <th>Tetris Clear</th>
+        <th>Win/Lost</th>
         <th>Opponent</th>
+        <th>View Stats</th>
       </tr>
       <tr *ngFor="let game of this.playerService.games; let i = index">
         <td>{{i + 1}}</td>
-        <td><button (click)="loadGameData(i)">View</button></td>
-        <td *ngIf="gameWon">Won</td>
-        <td *ngIf="!gameWon">Lost</td>
-        <td>{{game.score}}</td>
-        <td>{{game.single_clear}}</td>
-        <td>{{game.double_clear}}</td>
-        <td>{{game.triple_clear}}</td>
-        <td>{{game.tetris_clear}}</td>
+        <td *ngIf="game.won">Won</td>
+        <td *ngIf="!game.won">Lost</td>
         <td>{{game.opponent_name}}</td>
+        <td><button (click)="loadGameData(i)">View</button></td>
       </tr>
     </table>
   </div>

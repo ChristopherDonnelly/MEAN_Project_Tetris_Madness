@@ -14,18 +14,28 @@ export class StatsComponent implements OnInit {
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
 
+  showGameNum: number = 0;
+
   constructor(
     private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
-    private _httpService: HttpService
-  ) { }
+    private _httpService: HttpService,
+    private activatedRoute: ActivatedRoute
+  ) {
+    this.activatedRoute.queryParams.subscribe((params: Params) => {
+      // this.showGameNum = parseInt(params.toString());
+      // this.loadGameData(params);
+    });
+  
+  }
 
   ngOnInit() {
     if(!this.playerService.username){
       this._router.navigate(['/']);
     }else{
-      this.loadGameData(0);
+      console.log(this._route.snapshot.paramMap.get('id'));
+      this.loadGameData(this.showGameNum);
     }
   }
 
@@ -74,11 +84,13 @@ export class StatsComponent implements OnInit {
       let game = this.playerService['games'][gameNum];
       let opponent_game;
 
+      console.log('*** opponent_id: '+game.opponent_id);
       let getOpponent = this._httpService.getUserGame(game.opponent_id, game.game_id);
       getOpponent.subscribe(data => {
         if(data['message'] == 'Error'){
           console.log(data);
         }else if(data['game']){
+          console.log(data['game'])
           opponent_game = data['game'].games[0];
 
           let total_clears = game.single_clear + game.double_clear + game.triple_clear + game.tetris_clear;

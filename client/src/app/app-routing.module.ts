@@ -16,21 +16,22 @@ const routes: Routes = [
     path: 'landing',
     component: LandingComponent,
     children: [
-      {path: 'pod', component: PodComponent},
-      {path: 'login', component: LoginComponent},
-      {path: 'register', component: RegisterComponent},
-      {path: '', pathMatch: 'prefix', redirectTo: 'login'}
+      { path: 'pod', component: PodComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
+      { path: '', pathMatch: 'prefix', redirectTo: 'login' }
     ]
   },
   {
     path: 'lobby',
     component: LobbyComponent,
     children: [
-      {path: 'chat', component: ChatComponent},
-      {path: '', pathMatch: 'prefix', redirectTo: 'lobby'}
+      { path: 'chat', component: ChatComponent },
+      { path: '', pathMatch: 'prefix', redirectTo: 'lobby' }
     ]
   },
-  {path: 'stats', component: StatsComponent},
+  { path: 'stats/:id', component: StatsComponent },
+  { path: 'stats', component: StatsComponent },
   { path: 'tetris-board', component: BoardtestComponent }, // temp switch
   { path: '', pathMatch: 'full', redirectTo: '/landing/login' },
   { path: '**', component: PodComponent }
