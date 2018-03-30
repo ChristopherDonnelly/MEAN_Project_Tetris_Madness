@@ -46,10 +46,11 @@ module.exports = {
         var query = {'_id': req.params.id};
 
         console.log(req.body)
+        console.log(req.body)
       
-        console.log('Attempting to update User by Id: '+req.body.games);
+        console.log('Attempting to update User by Id: '+req.body);
 
-        User.findByIdAndUpdate(query, req.bod, {upsert: true, new: true, runValidators: true}, function(err, user){
+        User.findByIdAndUpdate(query, req.body, {upsert: true, new: true, runValidators: true}, function(err, user){
             if(err) {
                 console.log('Something went wrong, could not update User: '+req.params.id);
                 console.log("Returned error", err);

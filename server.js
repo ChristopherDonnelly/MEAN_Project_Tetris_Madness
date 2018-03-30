@@ -88,6 +88,10 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.to(myGameRoom).emit('opponentLost', data);
     });
 
+    socket.on('sabotage', (data) => {
+        socket.broadcast.to(myGameRoom).emit('addSabotage', data);
+    });
+
     socket.on('update', (data) => {
         socket.broadcast.to('/'+data.room_id).emit('updateOpponent', data);
     });

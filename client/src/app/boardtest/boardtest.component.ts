@@ -73,6 +73,10 @@ export class BoardtestComponent implements OnInit {
             this.opponentLost();
         });
 
+        this.playerService.socket.on('addSabotage', (gameData) => {
+            this.player.sabotage += gameData.sabotage;
+        });
+
         this.gameRunning = true;
         this.playerReset();
         this.updateScore();
@@ -136,10 +140,18 @@ export class BoardtestComponent implements OnInit {
     }
 
     opponent = {
-        pos: {x: 0, y:0},
+        pos: {x: 0, y: 0},
         matrix: null,
         score: 0,
-        lines: 0
+        result: "win",
+        level: 1,
+        lines: 0,
+        singles: 0,
+        doubles: 0,
+        triples: 0,
+        quadruples: 0,
+        sabotage: 0,
+        won: false
     }
 
   animateMe() {
@@ -223,13 +235,16 @@ export class BoardtestComponent implements OnInit {
     // ADD: send sabotage to other player if 2+ lines
     // this.beenSabotaged(rowCount);
     if (rowCount == 2){
-        this.player.sabotage += 1;
+        // this.opponent.sabotage += 1;
+        this.playerService.socket.emit('sabotage', { sabotage: 1 });
     }
     else if (rowCount == 3){
-        this.player.sabotage += 2;
+        // this.opponent.sabotage += 2;
+        this.playerService.socket.emit('sabotage', { sabotage: 2 });        
     }
     else if (rowCount == 4){
-        this.player.sabotage += 4;
+        // this.opponent.sabotage += 4;
+        this.playerService.socket.emit('sabotage', { sabotage: 4 });        
     }
     this.levelUp();
   }
@@ -321,7 +336,7 @@ export class BoardtestComponent implements OnInit {
     this.context.fillRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
 
     this.playerService.my_data = {arena: this.arena, player: this.player};
-    this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentId});
+    this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponentId: this.playerService.opponentId});
 
     this.drawMatrix(this.arena, {x: 0, y: 0}, this.context);
     this.drawMatrix(this.player.matrix, this.player.pos, this.context);
@@ -378,7 +393,23 @@ export class BoardtestComponent implements OnInit {
 
     console.log(this.playerService)
 
-    this._httpService.updateUser(this.playerService._id, this.playerService);
+    // let playerObj = this.playerService;
+
+    // delete playerObj['game_socket'];
+    // delete playerObj['my_data'];
+    // delete playerObj['socket'];
+    // delete playerObj['__proto__'];
+
+    let updatePlayer = this._httpService.updateUser(this.playerService._id, this.playerService['games']);
+
+    updatePlayer.subscribe(data => {
+        if(data['message'] == 'Error'){
+            console.log(data['error'].errors.username.message)
+        }else{
+            console.log('Hurray!')
+            console.log(data)
+        }
+    });
   }
 
   hardDrop() {
