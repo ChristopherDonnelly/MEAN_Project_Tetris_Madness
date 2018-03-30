@@ -285,6 +285,7 @@ export class BoardtestComponent implements OnInit {
             if (m[y][x] !== 0 && // when BOTH player &
                (arena[y + o.y] &&
                 arena[y + o.y][x + o.x]) !== 0) { // arena are not 0, they collide
+                    console.log('Collide at '+o.y);
                 return true;
             }
         }
