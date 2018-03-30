@@ -34,7 +34,7 @@ export class LobbyComponent implements OnInit {
         console.log('Joining Game')
         this.playerService.gameId = gameData.gameId;
         this.playerService.opponent = gameData.username;
-        this.playerService.opponentSocket = gameData.userSocket;
+        this.playerService.opponentId = gameData.userId;
       });
 
       this.playerService.socket.on('startGame', (gameData) => {
@@ -45,6 +45,6 @@ export class LobbyComponent implements OnInit {
   }
 
   startGame(){
-    this.playerService.socket.emit('createGame', { username: this.playerService.username });
+    this.playerService.socket.emit('createGame', { username: this.playerService.username, _id: this.playerService._id });
   }
 }

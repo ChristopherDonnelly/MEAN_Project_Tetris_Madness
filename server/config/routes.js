@@ -17,6 +17,8 @@ module.exports = (app) => {
     });
 
     app.put('/users/:id', (req, res) => {
+        console.log('Routes Update User:' )
+        console.log(req.body)
         db_ctrl.update(req, res);
     });
 

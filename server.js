@@ -17,7 +17,7 @@ let games = [];
 let gameQueue = {
     gameId: '',
     username: '',
-    userSocket: ''
+    userId: ''
 };
 
 const server = app.listen(8000, () => { 
@@ -53,9 +53,9 @@ io.sockets.on('connection', function (socket) {
 
             gameQueue.gameId = gameId;
             gameQueue.username = player.username;
-            gameQueue.userSocket = socket.id;
+            gameQueue.userId = player._id;
 
-            socket.emit('gameInfo', { gameId: gameQueue.gameId, username: 'waiting', userSocket: 'waiting' });
+            socket.emit('gameInfo', { gameId: gameQueue.gameId, username: 'waiting', userId: 'waiting' });
 
             socket.nickname = room;
             socket.join(room);
@@ -72,17 +72,20 @@ io.sockets.on('connection', function (socket) {
 
             socket.emit('gameInfo', gameQueue);
 
-            socket.broadcast.to(room).emit('gameInfo', { gameId: gameQueue.gameId, username: player.username, userSocket: socket.id });
+            socket.broadcast.to(room).emit('gameInfo', { gameId: gameQueue.gameId, username: player.username, userId: player._id });
 
             io.sockets.in(room).emit('startGame');
 
             gameQueue = {
                 gameId: '',
                 username: '',
-                userSocket: ''
+                userId: ''
             };
         }
+    });
 
+    socket.on('endGame', (data) => {
+        socket.broadcast.to(myGameRoom).emit('opponentLost', data);
     });
 
     socket.on('update', (data) => {
