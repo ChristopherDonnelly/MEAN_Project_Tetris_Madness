@@ -166,11 +166,23 @@ export class BoardtestComponent implements OnInit {
         }
     };
     for (let i = 0; i < (this.player.sabotage - concrete); i++) {
-        // console.log("Sabotage: ", this.player.sabotage);
-        // console.log("CONCRETE: ", concrete);
+        console.log("Sabotage: ", this.player.sabotage);
+        console.log("CONCRETE: ", concrete);
+        // hot fix. All sabotage for now will start will a concrete 
+        let rand_blocks = [8];
+        // coin flipt to determine space vs. concrete block to randomize sabotage sent
+        for (let i = 0; i < 11; i++) {
+            let randomize = Math.round(Math.random());
+            if (randomize == 1) {
+                rand_blocks.push(8); // concrete
+            }
+            else {
+                rand_blocks.push(0); // space
+            }
+        }
         this.arena.shift();  
-        this.arena.push([8,8,8,8,8,8,8,8,8,8,8,8]);
-        // console.log(this.arena);
+        this.arena.push(rand_blocks);
+        console.log(this.arena);
     }
     // console.table("TABLE: ", this.arena);
   }
@@ -178,7 +190,7 @@ export class BoardtestComponent implements OnInit {
   addEventListener(){
     document.addEventListener('keydown', event => { 
         
-        event.preventDefault();
+        // event.preventDefault();
         // move player
         if (event.keyCode === 37) { // LEFT
             this.playerMove(-1);
@@ -210,7 +222,7 @@ export class BoardtestComponent implements OnInit {
     let pointsMultiplier = 1;
     outer: for (let y = this.arena.length -1; y > 0; --y) {
         for (let x = 0; x < this.arena[y].length; ++x) {
-            if (this.arena[y][x] === 0 || this.arena[y][x] === 8) {
+            if (this.arena[y][x] === 0) {
                 continue outer;
             }
         }
