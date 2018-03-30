@@ -28,15 +28,19 @@ input[type="text"] {
 }
 
 input[type="submit"] {
-    width: 96%;
+    width: 93%;
     height: 49px;
-    background-color: mediumaquamarine;
+    background: linear-gradient(to bottom right, #a2eed5, mediumaquamarine);
+    border-radius: 5px;
     border: none;
-    box-shadow: 2px 2px 2px 0px #9E9E9E;
+    box-shadow: 2px 2px 5px 0px #9E9E9E;
     margin: 10px 0px 20px;
-    color: darkslategray;
+    color: darkslategrey;
     cursor: pointer;
     font-size: 25px;
+}
+input[type="submit"]:hover {
+    color: lightgoldenrodyellow;
 }
 #error_layer {
     height: 50px;
