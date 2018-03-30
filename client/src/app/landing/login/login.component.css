@@ -5,7 +5,7 @@ form {
     width: 50%;
     margin: 20px auto;
     padding: 20px;
-    text-align: right;
+    text-align: center;
     height: 250px;
 }
 label {
@@ -17,23 +17,30 @@ input[type="text"], input[type="password"] {
     height: 25px;
     font-size: 1em;
     padding: 0px 5px;
+    text-align: center;
+    box-shadow: 2px 2px mediumseagreen;
 }
 input[type="text"] {
-    height: 43px;
+    height: 37px;
     width: 61%;
-    font-size: 30px;
+    font-size: 23px;
+    margin-top: 5%;
 }
 
 input[type="submit"] {
-    width: 96%;
+    width: 93%;
     height: 49px;
-    background-color: mediumaquamarine;
+    background: linear-gradient(to bottom right, #a2eed5, mediumaquamarine);
+    border-radius: 5px;
     border: none;
-    box-shadow: 2px 2px 2px 0px #9E9E9E;
+    box-shadow: 2px 2px 5px 0px #9E9E9E;
     margin: 10px 0px 20px;
-    color: darkslategray;
+    color: darkslategrey;
     cursor: pointer;
     font-size: 25px;
+}
+input[type="submit"]:hover {
+    color: lightgoldenrodyellow;
 }
 #error_layer {
     height: 50px;

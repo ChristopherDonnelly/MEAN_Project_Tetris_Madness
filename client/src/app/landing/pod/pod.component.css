@@ -1,16 +1,29 @@
-h1 {
+* {
+    /* color: rgb(116, 255, 205); */
+    color: #7bf1e7c7;
+}
+h3 {
     margin: 0px 110px;
+    font-weight: 100;
+}
+#name_desc h2 {
+    color: rgb(240, 231, 155);
 }
 #pod_layer {
-    border: 1px solid black;
     padding: 10px 5px;
     margin: 10px 110px;
-    background-color: #eeeeee;
+    background: linear-gradient(to left, rgba(255,0,0,0), rgba(143, 202, 183, 0.48));
+    box-shadow: -3px 2px 18px 1px #9cdac5ad;
+    border-radius: 10px;
 }
 img {
     width: 130px;
     display: inline-block;
     vertical-align: top;
+    border-radius: 75px;
+}
+#high_score h2 {
+    color: #7bf1e7;
 }
 #name_desc, #high_score {
     display: inline-block;
