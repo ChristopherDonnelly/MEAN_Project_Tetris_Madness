@@ -46,6 +46,7 @@ module.exports = {
         var query = {'_id': req.params.id};
 
         console.log(req.body)
+        console.log(req.body)
       
         console.log('Attempting to update User by Id: '+req.body);
 

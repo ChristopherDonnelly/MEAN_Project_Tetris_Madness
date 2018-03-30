@@ -366,7 +366,7 @@ update = (time = 0) => {
 
   this.lastTime = time;
 
-  // this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentSocket});
+  // this.playerService.socket.emit('update', {data: this.playerService.my_data, room_id: this.playerService.gameId, opponent_socket: this.playerService.opponentId});
 
   this.draw();
   // requestAnimationFrame(this.update);
