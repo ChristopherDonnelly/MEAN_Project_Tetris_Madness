@@ -29,8 +29,6 @@ export class HttpService {
   }
 
   updateUser(id, data){
-    console.log('/users/'+id)
-    console.log(data)
     return this._http.put('/users/'+id, data);
   }
 

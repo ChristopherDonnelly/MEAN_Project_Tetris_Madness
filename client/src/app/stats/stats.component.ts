@@ -14,29 +14,35 @@ export class StatsComponent implements OnInit {
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
 
+  showGameNum: number = 0;
+
   constructor(
     private playerService: PlayerService,
     private _router: Router,
     private _route: ActivatedRoute,
-    private _httpService: HttpService
+    private _httpService: HttpService,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
     if(!this.playerService.username){
       this._router.navigate(['/']);
     }else{
-      this.loadGameData(0);
+      this.showGameNum = parseInt(this._route.snapshot.paramMap.get('id'));
+      this.showGameNum = (this.showGameNum)?this.showGameNum:0;
+
+      this.loadGameData(this.showGameNum);
     }
   }
 
   // lineChart
   public lineChartData:Array<any> = [
-    {data: [0, 0, 0, 0, 0, 0], label: 'Player 1'},
-    {data: [0, 0, 0, 0, 0, 0], label: 'Player 2'},
-    {data: [0, 0, 0, 0, 0, 0], label: 'Player 1 Average'}
+    {data: [0, 0, 0, 0, 0], label: 'Player 1'},
+    {data: [0, 0, 0, 0, 0], label: 'Player 2'},
+    {data: [0, 0, 0, 0, 0], label: 'Player 1 Average'}
   ];
 
-  public lineChartLabels:Array<any> = ['Score', 'Total Clears', 'Single Clear', 'Double Clear', 'Triple Clear', 'Tetris Clear'];
+  public lineChartLabels:Array<any> = ['Total Clears', 'Single Clear', 'Double Clear', 'Triple Clear', 'Tetris Clear'];
 
   public lineChartOptions:any = {
     responsive: true
@@ -70,15 +76,18 @@ export class StatsComponent implements OnInit {
   ];
 
   public loadGameData(gameNum):void {
+    this.showGameNum = gameNum;
     if(this.playerService['games']){
       let game = this.playerService['games'][gameNum];
       let opponent_game;
 
+      console.log('*** opponent_id: '+game.opponent_id);
       let getOpponent = this._httpService.getUserGame(game.opponent_id, game.game_id);
       getOpponent.subscribe(data => {
         if(data['message'] == 'Error'){
           console.log(data);
         }else if(data['game']){
+          console.log(data['game'])
           opponent_game = data['game'].games[0];
 
           let total_clears = game.single_clear + game.double_clear + game.triple_clear + game.tetris_clear;
@@ -88,7 +97,7 @@ export class StatsComponent implements OnInit {
 
           for(let i=0; i<game_len; i++){
             let currGame = this.playerService['games'][i];
-            average_score += currGame.score;
+            // average_score += currGame.score;
             average_clears += currGame.single_clear + currGame.double_clear + currGame.triple_clear + currGame.tetris_clear;
             average_singles += currGame.single_clear;
             average_doubles += currGame.double_clear;
@@ -96,7 +105,7 @@ export class StatsComponent implements OnInit {
             average_tetris += currGame.tetris_clear;
           }
 
-          average_score /= game_len
+          // average_score /= game_len
           average_clears /= game_len;
           average_singles /= game_len;
           average_doubles /= game_len;
@@ -104,9 +113,9 @@ export class StatsComponent implements OnInit {
           average_tetris /= game_len;
 
           this.lineChartData = [
-            {data: [game.score, total_clears, game.single_clear, game.double_clear, game.triple_clear, game.tetris_clear], label: this.playerService.username},
-            {data: [opponent_game.score, opponent_total_clears, opponent_game.single_clear, opponent_game.double_clear, opponent_game.triple_clear, opponent_game.tetris_clear], label: game.opponent_name},
-            {data: [average_score, average_clears, average_singles, average_doubles, average_triples, average_tetris], label: this.playerService.username + ' Average'}
+            {data: [total_clears, game.single_clear, game.double_clear, game.triple_clear, game.tetris_clear], label: this.playerService.username},
+            {data: [opponent_total_clears, opponent_game.single_clear, opponent_game.double_clear, opponent_game.triple_clear, opponent_game.tetris_clear], label: game.opponent_name},
+            {data: [average_clears, average_singles, average_doubles, average_triples, average_tetris], label: this.playerService.username + ' Average'}
           ];
         }
       });

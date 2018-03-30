@@ -45,9 +45,6 @@ module.exports = {
     update: (req, res) => {
         var query = {'_id': req.params.id};
 
-        console.log(req.body)
-        console.log(req.body)
-      
         console.log('Attempting to update User by Id: '+req.body);
 
         User.findByIdAndUpdate(query, req.body, {upsert: true, new: true, runValidators: true}, function(err, user){

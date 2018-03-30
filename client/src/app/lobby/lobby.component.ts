@@ -22,11 +22,11 @@ export class LobbyComponent implements OnInit {
       this._router.navigate(['/']);
     }else{
       this.playerService.socket.on('messageReceived', (data) => {
-        console.log('data: '+data)
+        // console.log('data: '+data)
       });
 
       this.playerService.socket.on('gameInfo', (gameData) => {
-        console.log('Game Id: '+gameData);
+        // console.log('Game Id: '+gameData);
         this.playerService.joinGame(gameData);
       });
 

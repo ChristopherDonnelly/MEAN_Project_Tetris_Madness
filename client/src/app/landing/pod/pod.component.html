@@ -1,13 +1,12 @@
-<div id="pod" *ngIf="user.username">
-  <h3>Current Leader!</h3>
-  <div id="pod_layer">
-    <img src="https://miquon.org/wp-content/uploads/2016/02/GenericUser.png" alt="Current Leader">
-    <div id="name_desc">
-      <h2>{{user.username}}</h2>
-    </div>
-    <div id="high_score">
-      <h2>High Score</h2>
-      <p>{{user.score}}</p>
+<div id="pod_wrapper">
+  <div id="pod" *ngIf="user.username">
+    <h3>Current Leader!</h3>
+    <div id="pod_layer">
+      <img src="https://miquon.org/wp-content/uploads/2016/02/GenericUser.png" alt="Current Leader">
+      <div id="name_desc">
+        <h2>{{user.username}}</h2>
+        <p>High Score: {{user.score}}</p>
+      </div>
     </div>
   </div>
 </div>

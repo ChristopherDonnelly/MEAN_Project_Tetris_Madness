@@ -8,7 +8,12 @@ nextBlockCanvas {
     border: none;
 }
 .nextBlock {
-    width: 118px;
+    width: 160px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 50px;
+    border: 1px solid white;
+    text-align: center;
 }
 .nextBlock h3{
     text-align: center;
@@ -16,6 +21,8 @@ nextBlockCanvas {
 }
 #canvases {
     margin-top: -90px;
+    display: inline-block;
+    vertical-align: top;
 }
 p {
     width: 200px;

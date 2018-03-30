@@ -1,5 +1,9 @@
+<div id="nav">
+    <a [routerLink]="['/lobby']">Lobby</a> |
+    <a [routerLink]="['/']">Logout</a>
+</div>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-sm-12 col-lg-5" style="margin-bottom: 40px;">
     <div style="display: block;">
     <canvas baseChart width="400" height="400"
                 [datasets]="lineChartData"
@@ -10,31 +14,27 @@
                 [chartType]="lineChartType"></canvas>
     </div>
   </div>
-  <div class="col-md-6" style="margin-bottom: 10px">
+  <div class="col-md-6 col-sm-12" style="margin-bottom: 10px">
     <table class="table table-responsive table-condensed">
-      <tr>
-        <th>Game #</th>
-        <th>View Stats</th>
-        <th>Win/Lose</th>
-        <th>Score</th>
-        <th>Single Clear</th>
-        <th>Double Clear</th>
-        <th>Triple Clear</th>
-        <th>Tetris Clear</th>
-        <th>Opponent</th>
-      </tr>
-      <tr *ngFor="let game of this.playerService.games; let i = index">
-        <td>{{i + 1}}</td>
-        <td><button (click)="loadGameData(i)">View</button></td>
-        <td *ngIf="gameWon">Won</td>
-        <td *ngIf="!gameWon">Lost</td>
-        <td>{{game.score}}</td>
-        <td>{{game.single_clear}}</td>
-        <td>{{game.double_clear}}</td>
-        <td>{{game.triple_clear}}</td>
-        <td>{{game.tetris_clear}}</td>
-        <td>{{game.opponent_name}}</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>Game #</th>
+          <th>Win/Lost</th>
+          <th>Score</th>
+          <th>Opponent</th>
+          <th>View Stats</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let game of this.playerService.games; let i = index" [ngClass]="{hilite: showGameNum == i}">
+          <td>{{i + 1}}</td>
+          <td *ngIf="game.won">Won</td>
+          <td *ngIf="!game.won">Lost</td>
+          <td>{{game.score}}</td>
+          <td>{{game.opponent_name}}</td>
+          <td><button (click)="loadGameData(i)">View</button></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </div>

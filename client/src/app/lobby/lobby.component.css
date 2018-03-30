@@ -1,24 +1,45 @@
-#play_layer, #game_test_layer {
-    display: inline-block;
-    vertical-align: top;
-    width: 40%;
+#play_layer {
+    text-align: center;
+    height: 250px;
+    padding: 150px 0px 0px;
 }
-/* #game_test_layer {
-
-} */
 
 button {
     background: linear-gradient(to bottom right, #a2eed5, mediumaquamarine);
     border-radius: 5px;
     border: none;
     box-shadow: 2px 2px 5px 0px #9E9E9E;
-    margin: 0px 16% 30px;
     color: darkslategrey;
     cursor: pointer;
-    font-size: 25px;
-    height: 53px;
-    width: 195px;
+    font-size: 2.4em;
+    height: 90px;
+    width: 250px;
 }
 button:hover {
     color: lightgoldenrodyellow;
+}
+
+#play_layer h1 {
+    width: 420px;
+    height: 49px;
+    border-radius: 5px;
+    border: 1px solid #a2eed5;
+    margin: 0px auto;
+    padding: 20px 0px 10px;
+}
+
+#nav {
+    text-align: right;
+    margin-top: -50px;
+}
+
+#nav a { 
+    font-family: 'Muli', sans-serif;
+    color: lightseagreen;
+    text-decoration: none;
+    background-color: transparent;
+}
+#nav a:hover {
+    color: lightgoldenrodyellow;
+    font-style: italic;
 }
