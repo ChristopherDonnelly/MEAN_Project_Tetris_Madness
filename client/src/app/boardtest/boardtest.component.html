@@ -17,15 +17,19 @@
 
     <div class="player_container">
       <h1>{{ playerService.username }}</h1>
-      <h3 class="player_info">Score: {{ player.score }}</h3>
-      <h3 class="player_info">Level: {{ player.level }} </h3>
+      <div class="info_container">
+          <h3 class="player_info">Score: {{ player.score }}</h3>
+          <h3 class="player_info">Level: {{ player.level }} </h3>
+      </div>
       <canvas id="tetris" width="240" height="400" #tetris></canvas>
     </div>
 
     <div class="opponent_container">
       <h1>{{ playerService.opponent }}</h1>
-      <h3 class="player_info">Score: {{ opponent.score }}</h3>
-      <h3 class="player_info">Level: {{ opponent.level }}</h3>
+      <div class="info_container">
+        <h3 class="player_info">Score: {{ opponent.score }}</h3>
+        <h3 class="player_info">Level: {{ opponent.level }}</h3>
+      </div>
       <canvas id="opponentCanvas" width="240" height="400" #opponentCanvas></canvas>
     </div>
     
