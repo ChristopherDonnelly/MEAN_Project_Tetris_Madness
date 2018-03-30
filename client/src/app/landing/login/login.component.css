@@ -5,7 +5,7 @@ form {
     width: 50%;
     margin: 20px auto;
     padding: 20px;
-    text-align: right;
+    text-align: center;
     height: 250px;
 }
 label {
@@ -17,11 +17,14 @@ input[type="text"], input[type="password"] {
     height: 25px;
     font-size: 1em;
     padding: 0px 5px;
+    text-align: center;
+    box-shadow: 2px 2px mediumseagreen;
 }
 input[type="text"] {
-    height: 43px;
+    height: 37px;
     width: 61%;
-    font-size: 30px;
+    font-size: 23px;
+    margin-top: 5%;
 }
 
 input[type="submit"] {

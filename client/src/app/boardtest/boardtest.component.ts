@@ -160,7 +160,7 @@ export class BoardtestComponent implements OnInit {
 
   addEventListener(){
     document.addEventListener('keydown', event => { 
-        // prevent scrolling
+        
         event.preventDefault();
         // move player
         if (event.keyCode === 37) { // LEFT
@@ -170,15 +170,19 @@ export class BoardtestComponent implements OnInit {
            this.playerMove(1);
         }
         else if (event.keyCode === 40) { // DOWN
+            // prevent scrolling
+            event.preventDefault();
             this.playerDrop();
         }
         else if (event.keyCode === 38 || event.keyCode === 81) { // UP or Q, rotate clockwise
+            event.preventDefault();
             this.playerRotate(-1);
         }
         else if (event.keyCode === 87) { // W, rotate counter-clockwise
             this.playerRotate(1);
         }
         else if (event.keyCode == 32) { // SPACEBAR
+            event.preventDefault();
             this.hardDrop();
         }
     }); 
