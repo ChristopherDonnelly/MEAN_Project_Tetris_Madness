@@ -3,6 +3,22 @@
     vertical-align: top;
     width: 40%;
 }
-#game_test_layer {
+/* #game_test_layer {
 
+} */
+
+button {
+    background: linear-gradient(to bottom right, #a2eed5, mediumaquamarine);
+    border-radius: 5px;
+    border: none;
+    box-shadow: 2px 2px 5px 0px #9E9E9E;
+    margin: 0px 16% 30px;
+    color: darkslategrey;
+    cursor: pointer;
+    font-size: 25px;
+    height: 53px;
+    width: 195px;
+}
+button:hover {
+    color: lightgoldenrodyellow;
 }
