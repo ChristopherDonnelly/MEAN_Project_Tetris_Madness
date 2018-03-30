@@ -160,6 +160,8 @@ export class BoardtestComponent implements OnInit {
 
   addEventListener(){
     document.addEventListener('keydown', event => { 
+        // prevent scrolling
+        event.preventDefault();
         // move player
         if (event.keyCode === 37) { // LEFT
             this.playerMove(-1);

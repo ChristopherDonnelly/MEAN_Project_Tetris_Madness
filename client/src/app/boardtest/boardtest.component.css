@@ -3,6 +3,7 @@ body {
     padding: 25px 40px;
     border: 2px solid grey;
     box-shadow: 2px 2px #4beaff;
+    overflow: hidden;
 }
 nextBlockCanvas {
     border: none;
@@ -12,6 +13,7 @@ nextBlockCanvas {
 }
 .nextBlock h3{
     text-align: center;
+    display: inline-block;
 }
 p {
     width: 200px;
@@ -33,6 +35,10 @@ h1 {
     display: inline-block;
 }
 
+.player_info {
+    display: inline-block;
+    margin-right: 18%;
+}
 #tetris, #opponentCanvas {
     border: 3px solid white;
     box-shadow: 6px 3px 9px 6px #656e6f;
