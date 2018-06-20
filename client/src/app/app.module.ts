@@ -16,10 +16,8 @@ import { PodComponent } from './landing/pod/pod.component';
 import { LoginComponent } from './landing/login/login.component';
 import { RegisterComponent } from './landing/register/register.component';
 import { StatsComponent } from './stats/stats.component';
-import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { ChatComponent } from './lobby/chat/chat.component';
-import { BoardComponent } from './board/board.component';
 
 import { ChartsModule } from 'ng2-charts';
 import { BoardtestComponent } from './boardtest/boardtest.component';
@@ -33,10 +31,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     RegisterComponent,
     PodComponent,
     StatsComponent,
-    TetrisBoardComponent,
     LobbyComponent,
     ChatComponent,
-    BoardComponent,
     BoardtestComponent
   ],
   imports: [

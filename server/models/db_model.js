@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 module.exports = new mongoose.Schema({
-    username: { type: String, unique: true, required: [true, "Username is required"], minlength: [6, "Username must be at least 6 characters long"] },
+    username: { type: String, unique: true, required: [true, "Username is required"], minlength: [2, "Username must be at least 2 characters long"] },
     wins: { type: Number, default: 0 },
     loses: { type: Number, default: 0 },
     total_games_played: { type: Number, default: 0 },

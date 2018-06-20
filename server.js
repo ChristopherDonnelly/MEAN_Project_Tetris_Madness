@@ -20,13 +20,13 @@ let gameQueue = {
     userId: ''
 };
 
-const server = app.listen(8000, () => { 
-    console.log(`Server running on port #${port}`);
-});
+const server = require('http').createServer(app);
 
-const io = require('socket.io').listen(server);
+const io = require('socket.io')(server); //require('socket.io').listen(server);
 
-io.sockets.on('connection', function (socket) {
+console.log(io);
+
+io.on('connection', function (socket) {
     let myGameRoom;
 
     console.log("Client/socket is connected!");
@@ -108,4 +108,8 @@ io.sockets.on('connection', function (socket) {
             socket.broadcast.emit('messageReceived', { class: "server_msg", title: 'Tetris Madness Server says: ', message: currentUser.username + ' has left chat.' });
         }
     });
+});
+
+server.listen(port, () => { 
+    console.log(`Server running on port #${port}`);
 });

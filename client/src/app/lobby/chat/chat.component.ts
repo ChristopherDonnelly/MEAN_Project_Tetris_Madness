@@ -26,6 +26,8 @@ export class ChatComponent implements OnInit, AfterViewChecked {
   ngOnInit(){
     this.allMessages = [];
 
+    console.log('Chat Commponent Player Name: ' + this.playerService.username);
+
     if(!this.playerService.username){
       this._router.navigate(['/']);
     }else{

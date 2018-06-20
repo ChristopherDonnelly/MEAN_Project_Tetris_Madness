@@ -7,8 +7,6 @@ import { RegisterComponent } from './landing/register/register.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { ChatComponent } from './lobby/chat/chat.component';
 import { StatsComponent } from './stats/stats.component';
-import { TetrisBoardComponent } from './tetris-board/tetris-board.component';
-import { BoardComponent } from './board/board.component';
 import { BoardtestComponent } from './boardtest/boardtest.component';
 
 const routes: Routes = [

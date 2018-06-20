@@ -18,6 +18,8 @@ export class LobbyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log('Player Service Name: '+ this.playerService.username);
+
     if(!this.playerService.username){
       this._router.navigate(['/']);
     }else{
@@ -38,6 +40,7 @@ export class LobbyComponent implements OnInit {
       });
 
       this.playerService.socket.on('startGame', (gameData) => {
+        console.log('Start Game')
         this._router.navigate(['/tetris-board']);
       });
   

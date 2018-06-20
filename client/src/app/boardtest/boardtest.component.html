@@ -4,7 +4,10 @@
 </head>
 <body>
   <!-- <p [@myAwesomeAnimation]='state' (click)="animateMe()">I will animate.</p> -->
-
+  <div id="nav">
+    <a [routerLink]="['/lobby']">Lobby</a> |
+    <a [routerLink]="['/']">Logout</a>
+</div>
   <div class="nextBlock">
     <h3>Next Piece</h3>
     <canvas id="nextBlockCanvas" width="100" height="100" #nextBlockCanvas></canvas>

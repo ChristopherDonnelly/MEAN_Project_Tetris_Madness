@@ -34,7 +34,8 @@ export class PlayerService {
   }
 
   connect(){
-    this.socket = io('http://18.220.170.100:80');
+    console.log("Attempting to connect to Socket.IO")
+    this.socket = io('localhost:8000');
     this.socket.emit('introMessage', { username: this.username, message: ' has entered chat!'});
   }
 
@@ -43,13 +44,14 @@ export class PlayerService {
   // }
 
   joinGame(gameData){
-    this.game_socket = io('http://18.220.170.100:80/'+gameData.gameId);
+    this.game_socket = io('localhost:8000/'+gameData.gameId);
     this.gameId = gameData.gameId;
     this.opponent = gameData.username;
     this.opponentId = gameData.userId;
   }
 
   updateGameData(playerData){
+    
     let tempWin = 0;
     let tempLose = 0;
 
@@ -82,11 +84,7 @@ export class PlayerService {
       games: this['games']
     }
 
-    // console.log('PlayerService Start: ')
-    // console.log(this)
     Object.assign(this, update);
-    // console.log('PlayerService End: ')
-    // console.log(this)
    
     return update;
   }
