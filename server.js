@@ -111,5 +111,5 @@ io.on('connection', function (socket) {
 });
 
 server.listen(process.env.PORT || port, () => { 
-    console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+    // console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
